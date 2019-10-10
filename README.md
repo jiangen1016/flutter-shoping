@@ -1,5 +1,7 @@
-# first_flutter
 
+
+# first_flutter
+## 一个flutter项目，仿造京东商城，学习flutter
 A new Flutter project.
 
 ## Getting Started
@@ -16,4 +18,3 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
-## 一个flutter项目，仿造京东商城，学习flutter
