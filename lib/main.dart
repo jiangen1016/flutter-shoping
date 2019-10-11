@@ -50,7 +50,7 @@ class _ShoppingState extends State<Shopping> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '京东商城',
-      theme: ThemeData(primaryColor: Colors.red),
+      theme: ThemeData(primaryColor: Colors.redAccent),
       home: Scaffold(
         appBar: AppBar(
           title: Text(titleName),
@@ -176,7 +176,7 @@ class TagItem extends StatelessWidget {
       },
       child: Container(
           decoration: BoxDecoration(
-              color: Colors.blueAccent,
+              color: Colors.redAccent,
               borderRadius: BorderRadius.all(Radius.circular(5.0))),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),

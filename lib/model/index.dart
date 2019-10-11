@@ -25,3 +25,12 @@ class CategoryItem {
   String title;
   CategoryItem(this.title, this.icon);
 }
+
+class CarItem {
+  String goodsName;
+  dynamic goodsPrice;
+  String goodsImg;
+  int goodCount;
+  bool isChoosed;
+  CarItem(this.goodsName, this.goodsPrice, this.goodCount, this.goodsImg);
+}

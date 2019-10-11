@@ -13,9 +13,26 @@ class _UserState extends State<User> {
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(10.0),
         child: ListView(
-          children: <Widget>[UserTile()],
+          children: <Widget>[
+            UserTile(),
+            ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                GestureDetector(
+                  child: Container(
+                      child: ListTile(
+                        title: Text('我的地址'),
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  width: 1, color: Color(0xffe5e5e5))))),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
