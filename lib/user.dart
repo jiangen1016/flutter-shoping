@@ -1,3 +1,4 @@
+import 'package:first_flutter/address.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(User());
@@ -30,6 +31,10 @@ class _UserState extends State<User> with AutomaticKeepAliveClientMixin {
               shrinkWrap: true,
               children: <Widget>[
                 GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AddressMain()));
+                  },
                   child: Container(
                       child: ListTile(
                         title: Text('我的地址'),

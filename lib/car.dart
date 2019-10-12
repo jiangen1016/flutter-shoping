@@ -49,9 +49,11 @@ class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
     //  获取合计总金额
     double _getTotalPrice() {
       double price = 0;
+      int number = 0;
       for (int i = 0; i < carGoodsList.length; i++) {
         if (carGoodsList[i].isChoosed) {
           price += carGoodsList[i].goodCount * carGoodsList[i].goodsPrice;
+          number += carGoodsList[i].goodCount;
         }
       }
       return price;

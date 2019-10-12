@@ -34,3 +34,5 @@ class CarItem {
   bool isChoosed;
   CarItem(this.goodsName, this.goodsPrice, this.goodCount, this.goodsImg);
 }
+
+class Address {}
