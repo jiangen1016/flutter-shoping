@@ -16,7 +16,7 @@ class Index extends StatefulWidget {
   _IndexState createState() => _IndexState();
 }
 
-class _IndexState extends State<Index> {
+class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
   List<String> imageUrls;
 
   List<CategoryItem> categoryList;
@@ -26,6 +26,9 @@ class _IndexState extends State<Index> {
   List<Sales> salesList;
 
   List<Goods> goodsList;
+
+  @override
+  bool get wantKeepAlive => true;
 
   //  点击的banner的第几个
   _onBannerTap(index) {
@@ -57,6 +60,7 @@ class _IndexState extends State<Index> {
 
   initState() {
     super.initState();
+    print('index page init');
     this.categoryList = returnCategoryList;
     this.imageUrls = returnImageUrls;
     this.adviceList = returnAdviceList;

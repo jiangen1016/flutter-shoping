@@ -12,11 +12,14 @@ class MyCart extends StatefulWidget {
   _MyCartState createState() => _MyCartState();
 }
 
-class _MyCartState extends State<MyCart> {
+class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
   List<CarItem> carGoodsList;
+  @override
+  bool get wantKeepAlive => true;
 
   void initState() {
     super.initState();
+    print('car page init');
     this.carGoodsList = [
       CarItem('Apple 苹果x iPhonex 全面屏 手机', 4888, 1,
           'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),

@@ -15,16 +15,19 @@ class _ShoppingState extends State<Shopping> {
   int selectBar = 0;
   String titleName = '商城';
 
-  static var _widgetOptions = [];
+  List<Widget> _widgetOptions = [];
+
+  final pageController = PageController();
 
   void initState() {
-    _widgetOptions..add(Index())..add(MyCart(isFromBar: true))..add(User());
     super.initState();
+    _widgetOptions..add(Index())..add(MyCart(isFromBar: true))..add(User());
   }
 
   _onItemTapped(int index) {
     setState(() {
-      selectBar = index;
+      // selectBar = index;  // 没有用保持状态的写法
+      pageController.jumpToPage(index);
       switch (selectBar) {
         case 0:
           titleName = '京东商城';
@@ -36,6 +39,12 @@ class _ShoppingState extends State<Shopping> {
           titleName = '用户中心';
           break;
       }
+    });
+  }
+
+  void onPageChanged(int index) {
+    setState(() {
+      selectBar = index;
     });
   }
 
@@ -56,12 +65,33 @@ class _ShoppingState extends State<Shopping> {
           title: Text(titleName),
           actions: <Widget>[getSearchItem()],
         ),
-        body: Builder(
-          builder: (BuildContext context) {
-            return Container(
-              child: _widgetOptions.elementAt(selectBar),
-            );
-          },
+        // body: _widgetOptions[selectBar],
+        // 这个可以，但是会同时初始化所有界面
+        // body: IndexedStack(
+        //   index: selectBar,
+        //   children: _widgetOptions,
+        // ),
+        // 这个可以，但是会同时初始化所有界面
+        // body: Stack(
+        //   children: <Widget>[
+        //     Offstage(
+        //       offstage: selectBar != 0,
+        //       child: _widgetOptions[0],
+        //     ),
+        //     Offstage(
+        //       offstage: selectBar != 1,
+        //       child: _widgetOptions[1],
+        //     ),
+        //     Offstage(
+        //       offstage: selectBar != 2,
+        //       child: _widgetOptions[2],
+        //     ),
+        //   ],
+        // ),
+        body: PageView(
+          controller: pageController,
+          onPageChanged: onPageChanged,
+          children: _widgetOptions,
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[

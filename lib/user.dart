@@ -8,7 +8,16 @@ class User extends StatefulWidget {
   _UserState createState() => _UserState();
 }
 
-class _UserState extends State<User> {
+class _UserState extends State<User> with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    print('user page init');
+    super.initState();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     return Container(
