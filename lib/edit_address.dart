@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:city_pickers/city_pickers.dart';
 
 class EditAddress extends StatefulWidget {
-  EditAddress({Key key}) : super(key: key);
+  bool isNew;
+  EditAddress({Key key, this.isNew}) : super(key: key);
 
   _EditAddressState createState() => _EditAddressState();
 }
@@ -29,7 +30,19 @@ class _EditAddressState extends State<EditAddress> {
     }
   }
 
-  _submitAddress() {}
+  _submitAddress() {
+    //  如果是Form的自组件，可以直接调用这个方法
+    // if (Form.of(context).validate()) {
+    //   print('可以提交');
+    // }
+    var currentForm = (_formKey.currentState as FormState);
+    if (currentForm.validate()) {
+      currentForm.save();
+      print('可以提交');
+    }
+  }
+
+  getForm() {}
 
   @override
   void initState() {
@@ -43,11 +56,45 @@ class _EditAddressState extends State<EditAddress> {
       appBar: AppBar(
         title: Text('编辑收货地址'),
         actions: <Widget>[
-          FlatButton(
-            child: Text('删除',
-                style: TextStyle(color: Colors.white, fontSize: 16.0)),
-            onPressed: () {},
-          )
+          !widget.isNew
+              ? FlatButton(
+                  child: Text('删除',
+                      style: TextStyle(color: Colors.white, fontSize: 16.0)),
+                  onPressed: () {
+                    showDialog<Null>(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text('删除'),
+                          content: SingleChildScrollView(
+                            child: ListBody(
+                              children: <Widget>[
+                                Text('确定删除该地址？'),
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('确定'),
+                              onPressed: () {
+                                Navigator.of(context).pop(); // 关闭弹窗
+                                Navigator.pop(context); // 返回上层
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('取消'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                )
+              : Container()
         ],
       ),
       body: Padding(
@@ -72,13 +119,22 @@ class _EditAddressState extends State<EditAddress> {
                             child: Container(
                               padding: const EdgeInsets.fromLTRB(
                                   10.0, 0.0, 10.0, 0.0),
-                              child: TextField(
-                                  controller: _name,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: '请填写收货人姓名',
-                                      suffixIcon: Icon(Icons.person_add)),
-                                  onChanged: (v) {}),
+                              child: TextFormField(
+                                controller: _name,
+                                validator: (v) {
+                                  if (v.trim().length <= 0) {
+                                    return '收货人不能为空';
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: '请填写收货人姓名',
+                                    suffixIcon: Icon(Icons.person_add)),
+                                onChanged: (v) {},
+                                onSaved: (v) {
+                                  print(v);
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -96,8 +152,13 @@ class _EditAddressState extends State<EditAddress> {
                             child: Container(
                               padding: const EdgeInsets.fromLTRB(
                                   10.0, 0.0, 10.0, 0.0),
-                              child: TextField(
-                                // maxLength: 17,
+                              child: TextFormField(
+                                controller: _phone,
+                                validator: (v) {
+                                  if (v.trim().length <= 0) {
+                                    return '手机号码不能为空';
+                                  }
+                                },
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -120,9 +181,14 @@ class _EditAddressState extends State<EditAddress> {
                             child: Container(
                               padding: const EdgeInsets.fromLTRB(
                                   10.0, 0.0, 10.0, 0.0),
-                              child: TextField(
+                              child: TextFormField(
                                 controller: _city,
                                 onTap: _showCistPicker,
+                                validator: (v) {
+                                  if (v.trim().length <= 0) {
+                                    return '所在地区不能为空';
+                                  }
+                                },
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: '省市区县、乡镇等'),
@@ -148,8 +214,14 @@ class _EditAddressState extends State<EditAddress> {
                               alignment: Alignment.topCenter,
                               padding: const EdgeInsets.fromLTRB(
                                   10.0, 0.0, 10.0, 0.0),
-                              child: TextField(
+                              child: TextFormField(
+                                controller: _address,
                                 maxLines: 4,
+                                validator: (v) {
+                                  if (v.trim().length <= 0) {
+                                    return '详细地址不能为空';
+                                  }
+                                },
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: '街道、楼牌号等'),
@@ -159,7 +231,46 @@ class _EditAddressState extends State<EditAddress> {
                         ],
                       )),
                   Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 60.0,
+                            child: Text('标签'),
+                          ),
+                          Wrap(
+                            children: <Widget>[
+                              ChoiceChip(
+                                label: Text(
+                                  '家',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                selected: true,
+                                selectedColor: Colors.redAccent,
+                                onSelected: (bool selected) {},
+                              ),
+                              ChoiceChip(
+                                label: Text('公司',
+                                    style: TextStyle(color: Colors.black)),
+                                selected: false,
+                                backgroundColor: Color(0xffdcdcdc),
+                                selectedColor: Colors.redAccent,
+                                onSelected: (bool selected) {},
+                              ),
+                              ChoiceChip(
+                                label: Text('学校',
+                                    style: TextStyle(color: Colors.black)),
+                                selected: false,
+                                backgroundColor: Color(0xffdcdcdc),
+                                selectedColor: Colors.redAccent,
+                                onSelected: (bool selected) {},
+                              )
+                            ],
+                          )
+                        ],
+                      )),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[

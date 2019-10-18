@@ -1,6 +1,8 @@
 import 'package:first_flutter/model/index.dart';
+import 'package:first_flutter/provider/carModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyCart());
 
@@ -13,14 +15,14 @@ class MyCart extends StatefulWidget {
 }
 
 class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
-  List<CarItem> carGoodsList;
+  List<CarItem> carData;
   @override
   bool get wantKeepAlive => true;
 
   void initState() {
     super.initState();
     print('car page init');
-    this.carGoodsList = [
+    this.carData = [
       CarItem('Apple 苹果x iPhonex 全面屏 手机', 4888, 1,
           'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
       CarItem('Apple 苹果x iPhonex 全面屏 手机', 5888, 1,
@@ -32,220 +34,102 @@ class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
       CarItem('Apple 苹果x iPhonex 全面屏 手机', 8888, 1,
           'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp')
     ];
-    this.carGoodsList.forEach((item) => item.isChoosed = false);
+    this.carData.forEach((item) => item.isChoosed = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    var carGoodsList = this.carGoodsList;
     var isFromBar = widget.isFromBar != null ? true : false;
 
-    // 获取是不是全选了
-    bool _getIsChooseAll() {
-      return carGoodsList.every((item) => item.isChoosed == true);
+    if (isFromBar) {
+      return ChangeNotifierProvider<CarData>.value(
+        value: CarData(carData),
+        child: Container(child: ReturnCarMain()),
+      );
+    } else {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text('我的购物车'),
+          ),
+          body: ChangeNotifierProvider<CarData>.value(
+            value: CarData(carData),
+            child: Container(child: ReturnCarMain()),
+          ));
     }
+  }
+}
 
-    //  获取合计总金额
-    double _getTotalPrice() {
-      double price = 0;
-      int number = 0;
-      for (int i = 0; i < carGoodsList.length; i++) {
-        if (carGoodsList[i].isChoosed) {
-          price += carGoodsList[i].goodCount * carGoodsList[i].goodsPrice;
-          number += carGoodsList[i].goodCount;
-        }
-      }
-      return price;
-    }
+class ReturnCarMain extends StatelessWidget {
+  ReturnCarMain({Key key}) : super(key: key);
 
-    var isChooseAll = _getIsChooseAll();
-    var totalPrice = _getTotalPrice();
+  @override
+  Widget build(BuildContext context) {
+    var carData = Provider.of<CarData>(context);
 
-    // 单个选择，检查是不是全选，计算金额
-    _doCheck() {
-      setState(() {
-        isChooseAll = isChooseAll;
-        totalPrice = _getTotalPrice();
-      });
-    }
-
-    // 一键全选和取消全选
-    _chooseAll(val) {
-      setState(() {
-        carGoodsList.forEach((item) => item.isChoosed = val);
-        totalPrice = _getTotalPrice();
-      });
-    }
-
-    Widget returnCarMain() {
-      return Padding(
+    return Container(
+      child: Padding(
           padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
           child: Stack(
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.only(bottom: 50.0),
                 child: ListView.builder(
-                    itemCount: carGoodsList.length,
+                    itemCount: carData.carList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return GoodsItem(
                         index: index,
-                        carList: carGoodsList,
-                        checkChoose: _doCheck,
                       );
                     }),
               ),
-              Pay(
-                  screenWidth: screenWidth,
-                  carGoodsList: carGoodsList,
-                  isChooseAll: isChooseAll,
-                  totalPrice: totalPrice,
-                  callBack: (a) => _chooseAll(a))
+              Pay()
             ],
-          ));
-    }
-
-    if (isFromBar) {
-      return returnCarMain();
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('我的购物车'),
-        ),
-        body: returnCarMain(),
-      );
-    }
-  }
-}
-
-class Pay extends StatefulWidget {
-  final screenWidth;
-  final List<CarItem> carGoodsList;
-  bool isChooseAll;
-  double totalPrice;
-  Function callBack;
-  Pay(
-      {Key key,
-      @required this.screenWidth,
-      this.carGoodsList,
-      this.callBack,
-      this.isChooseAll,
-      this.totalPrice})
-      : super(key: key);
-
-  _PayState createState() => _PayState();
-}
-
-class _PayState extends State<Pay> {
-  // bool isChooseAll;
-  initState() {
-    super.initState();
-    // this.isChooseAll =
-    //     widget.carGoodsList.every((test) => test.isChoosed == true);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var totalPrice = widget.totalPrice != null ? widget.totalPrice : 0;
-    return Container(
-      child: Positioned(
-        bottom: 0,
-        left: 0,
-        right: 0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-              child: Container(
-                margin: const EdgeInsets.only(left: 3.0),
-                child: Row(
-                  children: <Widget>[
-                    widget.isChooseAll == true
-                        ? IconButton(
-                            onPressed: () {
-                              setState(() {
-                                widget.isChooseAll = false;
-                              });
-                              widget.callBack(false);
-                            },
-                            color: Colors.redAccent,
-                            icon: Icon(Icons.check_circle),
-                          )
-                        : IconButton(
-                            onPressed: () {
-                              setState(() {
-                                widget.isChooseAll = true;
-                              });
-                              widget.callBack(true);
-                            },
-                            color: Colors.grey,
-                            icon: Icon(Icons.check_circle),
-                          ),
-                    Container(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                              text: '合计:',
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                TextSpan(
-                                    text: '￥',
-                                    style: TextStyle(
-                                        fontSize: 12.0, color: Colors.red)),
-                                TextSpan(
-                                    text: totalPrice.toString(),
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red))
-                              ]),
-                        ))
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              width: widget.screenWidth / 4,
-              child: RaisedButton(
-                onPressed: () {
-                  print(widget.carGoodsList);
-                },
-                color: Colors.redAccent,
-                child: Text(
-                  '结算',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+          )),
     );
   }
 }
 
+// 没必要用 StatefullWidget
+// class _ReturnCarMainState extends State<ReturnCarMain> {
+//   @override
+//   Widget build(BuildContext context) {
+//     var carData = Provider.of<CarData>(context);
+
+//     return Container(
+//       child: Padding(
+//           padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+//           child: Stack(
+//             children: <Widget>[
+//               Container(
+//                 margin: const EdgeInsets.only(bottom: 50.0),
+//                 child: ListView.builder(
+//                     itemCount: carData.carList.length,
+//                     itemBuilder: (BuildContext context, int index) {
+//                       return GoodsItem(
+//                         index: index,
+//                       );
+//                     }),
+//               ),
+//               Pay()
+//             ],
+//           )),
+//     );
+//   }
+// }
+
+// 商品列表
+
 class GoodsItem extends StatefulWidget {
-  final List<CarItem> carList;
   final int index;
-  Function checkChoose;
-  GoodsItem({Key key, this.index, this.carList, this.checkChoose})
-      : super(key: key);
+  GoodsItem({Key key, this.index}) : super(key: key);
 
   _GoodsItemState createState() => _GoodsItemState();
 }
 
 class _GoodsItemState extends State<GoodsItem> {
-  void _valueChanged(CarItem item, bool value) {
-    setState(() {
-      item.isChoosed = value;
-      print(widget.carList);
-      widget.checkChoose();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    var item = widget.carList[widget.index];
+    var carData = Provider.of<CarData>(context);
+    var item = carData.carList[widget.index];
 
     return Container(
         child: GestureDetector(
@@ -259,7 +143,7 @@ class _GoodsItemState extends State<GoodsItem> {
                     content: SingleChildScrollView(
                       child: ListBody(
                         children: <Widget>[
-                          Text('确定删除��个商品吗？'),
+                          Text('确定删除这个商品吗？'),
                         ],
                       ),
                     ),
@@ -294,7 +178,7 @@ class _GoodsItemState extends State<GoodsItem> {
                     height: 20.0,
                     child: GestureDetector(
                       onTap: () {
-                        _valueChanged(item, !item.isChoosed);
+                        carData.valueChanged(widget.index);
                       },
                       child: item.isChoosed
                           ? Icon(
@@ -336,10 +220,8 @@ class _GoodsItemState extends State<GoodsItem> {
                                             color: Colors.redAccent,
                                             fontWeight: FontWeight.bold)),
                                     GoodsNum(
-                                        carList: widget.carList,
-                                        defaultCount: item.goodCount.toString(),
-                                        index: widget.index,
-                                        getAmount: widget.checkChoose)
+                                      index: widget.index,
+                                    )
                                   ],
                                 ),
                               )
@@ -355,14 +237,12 @@ class _GoodsItemState extends State<GoodsItem> {
   }
 }
 
+// 商品数量
+
 class GoodsNum extends StatefulWidget {
   final int index;
-  String defaultCount;
-  Function getAmount;
-  final List<CarItem> carList;
-  GoodsNum(
-      {Key key, this.index, this.defaultCount, this.carList, this.getAmount})
-      : super(key: key);
+
+  GoodsNum({Key key, this.index}) : super(key: key);
 
   _GoodsNumState createState() => _GoodsNumState();
 }
@@ -374,25 +254,9 @@ class _GoodsNumState extends State<GoodsNum> {
     super.initState();
   }
 
-  _changCount(int type) {
-    if (widget.carList[widget.index].goodCount == 1 && type == 0) {
-      return;
-    } else {
-      type == 0
-          ? setState(() {
-              widget.carList[widget.index].goodCount =
-                  widget.carList[widget.index].goodCount - 1;
-            })
-          : setState(() {
-              widget.carList[widget.index].goodCount =
-                  widget.carList[widget.index].goodCount + 1;
-            });
-      widget.getAmount();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    var carData = Provider.of<CarData>(context);
     return Container(
       child: Row(
         children: <Widget>[
@@ -400,7 +264,7 @@ class _GoodsNumState extends State<GoodsNum> {
               width: 30.0,
               child: FlatButton(
                 onPressed: () {
-                  _changCount(0);
+                  carData.changeGoodsCount(widget.index, '-', 0);
                 },
                 child: Text(
                   '-',
@@ -413,19 +277,20 @@ class _GoodsNumState extends State<GoodsNum> {
             child: TextField(
               controller: TextEditingController.fromValue(TextEditingValue(
                       text:
-                          '${widget.carList[widget.index].goodCount}') //判断keyword是否为空)
+                          '${carData.carList[widget.index].goodCount}') //判断keyword是否为空)
                   ),
               decoration:
                   InputDecoration(hintText: "", border: InputBorder.none),
               textAlign: TextAlign.center,
-              onChanged: (value) => getValue = value,
+              onChanged: (value) =>
+                  carData.changeGoodsCount(widget.index, '', int.parse(value)),
             ),
           ),
           Container(
             width: 30.0,
             child: FlatButton(
               onPressed: () {
-                _changCount(1);
+                carData.changeGoodsCount(widget.index, '+', 0);
               },
               child: Text(
                 '+',
@@ -435,6 +300,95 @@ class _GoodsNumState extends State<GoodsNum> {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+//  底部结算
+class Pay extends StatefulWidget {
+  Pay({Key key}) : super(key: key);
+
+  _PayState createState() => _PayState();
+}
+
+class _PayState extends State<Pay> {
+  initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    var carData = Provider.of<CarData>(context);
+
+    var totalPrice = carData.totalPrice != null ? carData.totalPrice : 0;
+    return Container(
+      child: Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            GestureDetector(
+              child: Container(
+                margin: const EdgeInsets.only(left: 3.0),
+                child: Row(
+                  children: <Widget>[
+                    carData.isChooseAll == true
+                        ? IconButton(
+                            onPressed: () {
+                              carData.chooseAll();
+                            },
+                            color: Colors.redAccent,
+                            icon: Icon(Icons.check_circle),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              carData.chooseAll();
+                            },
+                            color: Colors.grey,
+                            icon: Icon(Icons.check_circle),
+                          ),
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                              text: '合计:',
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                TextSpan(
+                                    text: '￥',
+                                    style: TextStyle(
+                                        fontSize: 12.0, color: Colors.red)),
+                                TextSpan(
+                                    text: totalPrice.toString(),
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red))
+                              ]),
+                        ))
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: screenWidth / 4,
+              child: RaisedButton(
+                onPressed: () {
+                  print(screenWidth);
+                },
+                color: Colors.redAccent,
+                child: Text(
+                  '结算',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
