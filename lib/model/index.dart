@@ -28,7 +28,7 @@ class CategoryItem {
 
 class CarItem {
   String goodsName;
-  dynamic goodsPrice;
+  double goodsPrice;
   String goodsImg;
   int goodCount;
   bool isChoosed;

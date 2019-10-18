@@ -23,7 +23,7 @@ class _AddressMainState extends State<AddressMain> {
               Container(
                 margin: const EdgeInsets.only(bottom: 55.0),
                 child: ListView.builder(
-                  itemCount: 20,
+                  itemCount: 10,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       decoration: BoxDecoration(
@@ -55,7 +55,9 @@ class _AddressMainState extends State<AddressMain> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => EditAddress()));
+                                  builder: (context) => EditAddress(
+                                        isNew: true,
+                                      )));
                         },
                         child: Center(
                           child: Text(
@@ -125,8 +127,12 @@ class _AddressItemState extends State<AddressItem> {
                   ),
                   alignment: Alignment.centerRight,
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EditAddress()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditAddress(
+                                  isNew: false,
+                                )));
                   },
                 )
               ],
