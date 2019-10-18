@@ -94,6 +94,7 @@ class ReturnCarMain extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     var carData = Provider.of<CarData>(context);
+<<<<<<< HEAD
 
 //     return Container(
 //       child: Padding(
@@ -117,6 +118,31 @@ class ReturnCarMain extends StatelessWidget {
 //   }
 // }
 
+=======
+
+//     return Container(
+//       child: Padding(
+//           padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+//           child: Stack(
+//             children: <Widget>[
+//               Container(
+//                 margin: const EdgeInsets.only(bottom: 50.0),
+//                 child: ListView.builder(
+//                     itemCount: carData.carList.length,
+//                     itemBuilder: (BuildContext context, int index) {
+//                       return GoodsItem(
+//                         index: index,
+//                       );
+//                     }),
+//               ),
+//               Pay()
+//             ],
+//           )),
+//     );
+//   }
+// }
+
+>>>>>>> 7d71194f50947bf913274a25cdd2fa73d30e83c9
 // 商品列表
 
 class GoodsItem extends StatefulWidget {
