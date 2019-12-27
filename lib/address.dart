@@ -1,5 +1,6 @@
+import 'package:first_flutter/model/index.dart';
 import 'package:flutter/material.dart';
-
+import 'http/http.dart';
 import 'edit_address.dart';
 
 class AddressMain extends StatefulWidget {
@@ -9,77 +10,117 @@ class AddressMain extends StatefulWidget {
 }
 
 class _AddressMainState extends State<AddressMain> {
+  List<AddressModel> _addressList = [];
+
+  @override
+  void initState() {
+    _getList().then((res) {
+      print(res);
+      var address = List<AddressModel>.from(res.map((item) => AddressModel(
+          item['userName'],
+          item['phone'],
+          item['province'],
+          item['city'],
+          item['area'],
+          item['address'])));
+      setState(() {
+        _addressList = address;
+      });
+    });
+    super.initState();
+  }
+
+  Future _getList() async {
+    return await HttpUtils.request(
+        'https://www.fastmock.site/mock/b7b1c8dd0f5250ffc71c0d191e06758b/dio/getAddress');
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       child: Scaffold(
-        appBar: AppBar(title: Text('收货地址')),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(bottom: 55.0),
-                child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  width: 1, color: Color(0xffe5e5e5)))),
-                      child: AddressItem(),
-                    );
-                  },
-                ),
-              ),
-              Positioned(
-                bottom: 15.0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Ink(
-                      width: screenWidth - 40.0,
-                      height: 40.0,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [Color(0xFFff2000), Color(0xFFff4f18)]),
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditAddress(
-                                        isNew: true,
-                                      )));
-                        },
-                        child: Center(
-                          child: Text(
-                            '新建地址',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+          appBar: AppBar(title: Text('收货地址')),
+          body: Builder(builder: (BuildContext context) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 55.0),
+                    child: ListView.builder(
+                      itemCount: _addressList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      width: 1, color: Color(0xffe5e5e5)))),
+                          child: AddressItem(
+                            addressItem: _addressList[index],
                           ),
-                        ),
-                      )),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+                        );
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 15.0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Ink(
+                          width: screenWidth - 40.0,
+                          height: 40.0,
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    Color(0xFFff2000),
+                                    Color(0xFFff4f18)
+                                  ]),
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditAddress(
+                                            isNew: true,
+                                          ))).then((res) => {
+                                    if (res != null)
+                                      {
+                                        Scaffold.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('添加地址成功'),
+                                        ))
+                                      }
+                                  });
+                            },
+                            child: Center(
+                              child: Text(
+                                '新建地址',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          )),
+                    ),
+                  )
+                ],
+              ),
+            );
+          })),
     );
   }
 }
 
 class AddressItem extends StatefulWidget {
-  AddressItem({Key key}) : super(key: key);
+  final AddressModel addressItem;
+  AddressItem({Key key, @required this.addressItem}) : super(key: key);
 
   _AddressItemState createState() => _AddressItemState();
 }
@@ -87,6 +128,13 @@ class AddressItem extends StatefulWidget {
 class _AddressItemState extends State<AddressItem> {
   TextStyle boldText = TextStyle(
       fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16.0);
+
+  String hideMiddleNumber(String phone) {
+    if (phone.length == 11) {
+      return phone.replaceRange(3, 7, '****');
+    }
+    return phone;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,13 +149,18 @@ class _AddressItemState extends State<AddressItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 RichText(
-                  text: TextSpan(style: boldText, text: '姜恩', children: [
-                    TextSpan(text: '    '),
-                    TextSpan(text: '176****9920')
-                  ]),
+                  text: TextSpan(
+                      style: boldText,
+                      text: '${widget.addressItem.userName}',
+                      children: [
+                        TextSpan(text: '    '),
+                        TextSpan(
+                            text:
+                                '${hideMiddleNumber(widget.addressItem.phone)}')
+                      ]),
                 ),
                 Text(
-                  '湖北省武汉市洪山区这个街道那个小区旁边这栋上面那层里面的那个房间',
+                  '${widget.addressItem.province}${widget.addressItem.city}${widget.addressItem.address}',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 )

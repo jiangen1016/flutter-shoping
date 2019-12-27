@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'http/http.dart';
+
 void main() => runApp(MyCart());
 
 class MyCart extends StatefulWidget {
@@ -15,36 +17,73 @@ class MyCart extends StatefulWidget {
 }
 
 class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
-  List<CarItem> carData;
+  List<CarItem> carData = [];
   @override
   bool get wantKeepAlive => true;
 
-   initState()  {
+  initState() {
     super.initState();
     print('car page init');
-    this.carData = [
-      CarItem('Apple 苹果x iPhonex 全面屏 手机', 4888, 1,
-          'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
-      CarItem('Apple 苹果x iPhonex 全面屏 手机', 5888, 1,
-          'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
-      CarItem('Apple 苹果x iPhonex 全面屏 手机', 6888, 1,
-          'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
-      CarItem('Apple 苹果x iPhonex 全面屏 手机', 7888, 1,
-          'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
-      CarItem('Apple 苹果x iPhonex 全面屏 手机', 8888, 1,
-          'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp')
-    ];
-    this.carData.forEach((item) => item.isChoosed = false);
+    this.getMycarList();
+    // this.carData = [
+    //   // CarItem('Apple 苹果x iPhonex 全面屏 手机', 4888, 1,
+    //   //     'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
+    //   // CarItem('Apple 苹果x iPhonex 全面屏 手机', 5888, 1,
+    //   //     'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
+    //   // CarItem('Apple 苹果x iPhonex 全面屏 手机', 6888, 1,
+    //   //     'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
+    //   // CarItem('Apple 苹果x iPhonex 全面屏 手机', 7888, 1,
+    //   //     'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
+    //   // CarItem('Apple 苹果x iPhonex 全面屏 手机', 8888, 1,
+    //   //     'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp')
+    // ];
+  }
+
+  getMycarList() {
+    _getList().then((res) {
+      var data = List<CarItem>.from(res.map((item) => CarItem(
+          item['goodsName'],
+          item['goodsPrice'],
+          item['goodCount'],
+          item['goodsImg'],
+          item['isChoosed'])));
+      setState(() {
+        carData = data;
+      });
+    });
+  }
+
+  @override
+  void deactivate() {
+    print('移除时：deactivate');
+    super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
-    var isFromBar = widget.isFromBar != null ? true : false;
+    // HttpUtils.request(
+    //         'https://www.fastmock.site/mock/b7b1c8dd0f5250ffc71c0d191e06758b/dio/get')
+    //     .then((res) {
+    //   print(res);
+    //   this.carData = List<CarItem>.from(res.map((item) => CarItem(
+    //       item['goodsName'],
+    //       item['goodsPrice'],
+    //       item['goodCount'],
+    //       item['goodsImg'],
+    //       item['isChoosed'])));
+    // });
+    // _doRefresh().then((result) {
+    //   print(result);
+    // });
 
+    var isFromBar = widget.isFromBar != null ? true : false;
     if (isFromBar) {
       return ChangeNotifierProvider<CarData>.value(
         value: CarData(carData),
-        child: Container(child: ReturnCarMain()),
+        child: Container(
+            child: ReturnCarMain(
+          callBack: getMycarList,
+        )),
       );
     } else {
       return Scaffold(
@@ -53,39 +92,59 @@ class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
           ),
           body: ChangeNotifierProvider<CarData>.value(
             value: CarData(carData),
-            child: Container(child: ReturnCarMain()),
+            child: Container(
+                child: ReturnCarMain(
+              callBack: getMycarList,
+            )),
           ));
     }
   }
 }
 
-class ReturnCarMain extends StatelessWidget {
-  ReturnCarMain({Key key}) : super(key: key);
+Future _getList() async {
+  return await HttpUtils.request(
+      'https://www.fastmock.site/mock/b7b1c8dd0f5250ffc71c0d191e06758b/dio/get');
+}
 
+class ReturnCarMain extends StatefulWidget {
+  final Function callBack;
+  ReturnCarMain({Key key, @required this.callBack}) : super(key: key);
+
+  @override
+  _ReturnCarMainState createState() => _ReturnCarMainState();
+}
+
+class _ReturnCarMainState extends State<ReturnCarMain> {
   @override
   Widget build(BuildContext context) {
     var carData = Provider.of<CarData>(context);
 
-    return Container(
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
-          child: Stack(
-            children: <Widget>[
-              // CircularProgressIndicator(), // loading
-              Container(
-                margin: const EdgeInsets.only(bottom: 50.0),
-                child: ListView.builder(
-                    itemCount: carData.carList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GoodsItem(
-                        index: index,
-                      );
-                    }),
-              ),
-              Pay()
-            ],
-          )),
-    );
+    return RefreshIndicator(
+        child: Container(
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+              child: Stack(
+                children: <Widget>[
+                  // CircularProgressIndicator(), // loading
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 50.0),
+                    child: ListView.builder(
+                        itemCount: carData.carList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GoodsItem(
+                            index: index,
+                          );
+                        }),
+                  ),
+                  Pay()
+                ],
+              )),
+        ),
+        onRefresh: _onRefresh);
+  }
+
+  Future<void> _onRefresh() async {
+    await widget.callBack();
   }
 }
 
@@ -94,7 +153,6 @@ class ReturnCarMain extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     var carData = Provider.of<CarData>(context);
-<<<<<<< HEAD
 
 //     return Container(
 //       child: Padding(
@@ -118,31 +176,6 @@ class ReturnCarMain extends StatelessWidget {
 //   }
 // }
 
-=======
-
-//     return Container(
-//       child: Padding(
-//           padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
-//           child: Stack(
-//             children: <Widget>[
-//               Container(
-//                 margin: const EdgeInsets.only(bottom: 50.0),
-//                 child: ListView.builder(
-//                     itemCount: carData.carList.length,
-//                     itemBuilder: (BuildContext context, int index) {
-//                       return GoodsItem(
-//                         index: index,
-//                       );
-//                     }),
-//               ),
-//               Pay()
-//             ],
-//           )),
-//     );
-//   }
-// }
-
->>>>>>> 7d71194f50947bf913274a25cdd2fa73d30e83c9
 // 商品列表
 
 class GoodsItem extends StatefulWidget {
@@ -165,7 +198,7 @@ class _GoodsItemState extends State<GoodsItem> {
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
-                  return CupertinoAlertDialog(
+                  return AlertDialog(
                     title: Text('删除'),
                     content: SingleChildScrollView(
                       child: ListBody(
@@ -178,7 +211,11 @@ class _GoodsItemState extends State<GoodsItem> {
                       FlatButton(
                         child: Text('确定'),
                         onPressed: () {
+                          carData.delItem(widget.index);
                           Navigator.of(context).pop();
+                          //  Scaffold.of(context).showSnackBar(SnackBar(
+                          //   content: Text('删除成功'),
+                          // ));
                         },
                       ),
                       FlatButton(
@@ -191,9 +228,6 @@ class _GoodsItemState extends State<GoodsItem> {
                   );
                 },
               );
-              // Scaffold.of(context).showSnackBar(SnackBar(
-              //   content: Text('删除这个'),
-              // ));
             },
             child: Card(
                 child: Padding(
@@ -276,14 +310,20 @@ class GoodsNum extends StatefulWidget {
 
 class _GoodsNumState extends State<GoodsNum> {
   var getValue;
+  TextEditingController numberController = TextEditingController();
 
   void initState() {
+    //  保持光标在input、最后面
+    numberController.selection = TextSelection.fromPosition(TextPosition(
+        offset: numberController.text.length,
+        affinity: TextAffinity.downstream));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var carData = Provider.of<CarData>(context);
+    var countText = carData.carList[widget.index].goodCount.toString();
     return Container(
       child: Row(
         children: <Widget>[
@@ -300,8 +340,53 @@ class _GoodsNumState extends State<GoodsNum> {
                 ),
               )),
           Container(
-            width: 50.0,
+            width: 100.0,
             child: TextField(
+              readOnly: true,
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext contex) {
+                      return AlertDialog(
+                        title: Text('修该商品数量'),
+                        content: TextField(
+                          autofocus: true,
+                          controller: TextEditingController.fromValue(
+                              TextEditingValue(
+                                  // 设置内容
+                                  text: countText.toString(),
+                                  // 保持光标在最后
+                                  selection: TextSelection.fromPosition(
+                                      TextPosition(
+                                          affinity: TextAffinity.downstream,
+                                          offset: countText.length)))),
+                          onChanged: (e) {
+                            numberController.text = e;
+                          },
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                              child: Text("取消"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                print("取消");
+                              }),
+                          FlatButton(
+                              child: Text("确定"),
+                              onPressed: () {
+                                if (numberController.text !=
+                                        carData.carList[widget.index].goodCount
+                                            .toString() &&
+                                    numberController.text != '') {
+                                  carData.changeCountForModal(widget.index,
+                                      int.parse(numberController.text));
+                                }
+                                Navigator.pop(context);
+                              })
+                        ],
+                      );
+                    });
+              },
               controller: TextEditingController.fromValue(TextEditingValue(
                       text:
                           '${carData.carList[widget.index].goodCount}') //判断keyword是否为空)
@@ -342,6 +427,17 @@ class Pay extends StatefulWidget {
 class _PayState extends State<Pay> {
   initState() {
     super.initState();
+  }
+
+  String getFixedTwo(double num) {
+    String getFixed = num.toString();
+    if (getFixed.indexOf('.') == -1) {
+      getFixed += '.00';
+    } else if (getFixed.length < getFixed.indexOf('.') + 3) {
+      getFixed += '0';
+    }
+    var index = getFixed.indexOf('.');
+    return getFixed.substring(0, index + 3);
   }
 
   @override
@@ -390,7 +486,8 @@ class _PayState extends State<Pay> {
                                     style: TextStyle(
                                         fontSize: 12.0, color: Colors.red)),
                                 TextSpan(
-                                    text: totalPrice.toString(),
+                                    // totalPrice.toStringAsFixed(2),  因为toStringAsFixed会四舍五入，所以洗一个街区字符串的方法
+                                    text: getFixedTwo(totalPrice),
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
@@ -404,9 +501,7 @@ class _PayState extends State<Pay> {
             Container(
               width: screenWidth / 4,
               child: RaisedButton(
-                onPressed: () {
-                  print(screenWidth);
-                },
+                onPressed: () {},
                 color: Colors.redAccent,
                 child: Text(
                   '结算',

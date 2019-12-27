@@ -32,7 +32,17 @@ class CarItem {
   String goodsImg;
   int goodCount;
   bool isChoosed;
-  CarItem(this.goodsName, this.goodsPrice, this.goodCount, this.goodsImg);
+  CarItem(this.goodsName, this.goodsPrice, this.goodCount, this.goodsImg,
+      this.isChoosed);
 }
 
-class Address {}
+class AddressModel {
+  String userName;
+  String phone;
+  String province;
+  String city;
+  String area;
+  String address;
+  AddressModel(this.userName, this.phone, this.province, this.city, this.area,
+      this.address);
+}

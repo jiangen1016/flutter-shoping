@@ -13,6 +13,11 @@ class CarData with ChangeNotifier {
     notifyListeners();
   }
 
+  delItem(int index) {
+    _carList.removeAt(index);
+    notifyListeners();
+  }
+
   // 计算总金额
   getTotalPrice() {
     var getChooseGoods =
@@ -20,6 +25,11 @@ class CarData with ChangeNotifier {
 
     return getChooseGoods.fold(
         0, (prev, item) => prev + item.goodsPrice * item.goodCount);
+  }
+
+  changeCountForModal(int index, int count) {
+    _carList[index].goodCount = count;
+    notifyListeners();
   }
 
   // 改变商品数量
@@ -45,6 +55,10 @@ class CarData with ChangeNotifier {
   }
 
   get carList => _carList;
+  set carlist(res) {
+    this._carList = res;
+  }
+
   double get totalPrice => getTotalPrice().toDouble();
   bool get isChooseAll => _carList.every((item) => item.isChoosed);
 }

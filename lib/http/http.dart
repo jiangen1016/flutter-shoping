@@ -28,7 +28,7 @@ class HttpUtils {
   static const String DELETE = 'delete';
 
   /// request method
-  static Future<Map> request(String url, {data, method}) async {
+  static Future request(String url, {data, method}) async {
     data = data ?? {};
     method = method ?? 'GET';
 
@@ -54,7 +54,6 @@ class HttpUtils {
       result = response.data;
 
       /// 打印响应相关信息
-      print('响应数据：' + response.toString());
     } on DioError catch (e) {
       /// 打印请求失败相关信息
       print('请求出错：' + e.toString());
@@ -68,10 +67,11 @@ class HttpUtils {
     if (dio == null) {
       /// 全局属性：请求前缀、连接超时时间、响应超时时间
       BaseOptions options = new BaseOptions(
-        baseUrl: API_PREFIX,
-        connectTimeout: CONNECT_TIMEOUT,
-        receiveTimeout: RECEIVE_TIMEOUT,
-      );
+          baseUrl: API_PREFIX,
+          connectTimeout: CONNECT_TIMEOUT,
+          receiveTimeout: RECEIVE_TIMEOUT,
+          // responseType: ResponseType.plain
+          );
 
       dio = new Dio(options);
     }
