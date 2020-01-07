@@ -260,7 +260,7 @@ class _GoodsItemState extends State<GoodsItem> {
                           child: Image.network(item.goodsImg, fit: BoxFit.fill),
                         ),
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,5 +1,7 @@
 import 'package:first_flutter/model/index.dart';
+import 'package:first_flutter/provider/addressModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'http/http.dart';
 import 'edit_address.dart';
 
@@ -20,11 +22,16 @@ class _AddressMainState extends State<AddressMain> {
           item['userName'],
           item['phone'],
           item['province'],
+          item['locationCode'],
           item['city'],
           item['area'],
           item['address'])));
       setState(() {
         _addressList = address;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // 这个是在页面绘制完成后回调， 那个时候肯定是有context 的
+        Provider.of<AddressData>(context).setAddressList(_addressList);
       });
     });
     super.initState();
@@ -38,7 +45,7 @@ class _AddressMainState extends State<AddressMain> {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-
+    var addressList = Provider.of<AddressData>(context).addressList;
     return Container(
       child: Scaffold(
           appBar: AppBar(title: Text('收货地址')),
@@ -50,16 +57,17 @@ class _AddressMainState extends State<AddressMain> {
                   Container(
                     margin: const EdgeInsets.only(bottom: 55.0),
                     child: ListView.builder(
-                      itemCount: _addressList.length,
+                      itemCount: addressList.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
                           decoration: BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(
                                       width: 1, color: Color(0xffe5e5e5)))),
-                          child: AddressItem(
-                            addressItem: _addressList[index],
-                          ),
+                          child: addressList.length > 0
+                              ? AddressItem(
+                                  addressItem: addressList[index], index: index)
+                              : Container(),
                         );
                       },
                     ),
@@ -120,7 +128,9 @@ class _AddressMainState extends State<AddressMain> {
 
 class AddressItem extends StatefulWidget {
   final AddressModel addressItem;
-  AddressItem({Key key, @required this.addressItem}) : super(key: key);
+  int index;
+  AddressItem({Key key, @required this.addressItem, @required this.index})
+      : super(key: key);
 
   _AddressItemState createState() => _AddressItemState();
 }
@@ -138,6 +148,7 @@ class _AddressItemState extends State<AddressItem> {
 
   @override
   Widget build(BuildContext context) {
+    var addressData = Provider.of<AddressData>(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0),
       padding: const EdgeInsets.all(10.0),
@@ -184,8 +195,7 @@ class _AddressItemState extends State<AddressItem> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditAddress(
-                                  isNew: false,
-                                )));
+                                isNew: false, index: widget.index)));
                   },
                 )
               ],

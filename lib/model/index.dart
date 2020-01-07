@@ -40,9 +40,10 @@ class AddressModel {
   String userName;
   String phone;
   String province;
+  String locationCode;
   String city;
   String area;
   String address;
-  AddressModel(this.userName, this.phone, this.province, this.city, this.area,
-      this.address);
+  AddressModel(this.userName, this.phone, this.province, this.locationCode,
+      this.city, this.area, this.address);
 }

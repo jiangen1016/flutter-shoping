@@ -2,8 +2,14 @@ import 'package:first_flutter/car.dart';
 import 'package:first_flutter/index.dart';
 import 'package:first_flutter/user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(Shopping());
+import 'provider/addressModel.dart';
+
+void main() => runApp(ChangeNotifierProvider.value(
+      value: AddressData(),
+      child: Shopping(),
+    ));
 
 class Shopping extends StatefulWidget {
   Shopping({Key key}) : super(key: key);
