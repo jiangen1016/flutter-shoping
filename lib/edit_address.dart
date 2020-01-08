@@ -52,8 +52,10 @@ class _EditAddressState extends State<EditAddress> {
                             FlatButton(
                               child: Text('确定'),
                               onPressed: () {
-                                Navigator.of(context).pop(); // 关闭弹窗
-                                Navigator.pop(context); // 返回上层
+                                Navigator.of(context).pop();
+                                Provider.of<AddressData>(context)
+                                    .removeAddressList(widget.index); // 关闭弹窗
+                                Navigator.of(context).pop('删除成功');
                               },
                             ),
                             FlatButton(

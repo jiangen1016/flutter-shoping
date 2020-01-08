@@ -195,7 +195,16 @@ class _AddressItemState extends State<AddressItem> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditAddress(
-                                isNew: false, index: widget.index)));
+                                isNew: false,
+                                index: widget.index))).then((res) => {
+                          if (res != null)
+                            {
+                              Scaffold.of(context).hideCurrentSnackBar(),
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text('删除成功'),
+                              ))
+                            }
+                        });
                   },
                 )
               ],

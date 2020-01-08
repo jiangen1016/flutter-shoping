@@ -11,5 +11,10 @@ class AddressData with ChangeNotifier {
     notifyListeners();
   }
 
+  removeAddressList(int index) {
+    this.addressList.removeAt(index);
+    notifyListeners();
+  }
+
   get getAddressList => this.addressList;
 }
