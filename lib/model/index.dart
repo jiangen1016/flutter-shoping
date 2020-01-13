@@ -43,7 +43,8 @@ class AddressModel {
   String locationCode;
   String city;
   String area;
+  bool isDefault;
   String address;
   AddressModel(this.userName, this.phone, this.province, this.locationCode,
-      this.city, this.area, this.address);
+      this.city, this.area, this.address, this.isDefault);
 }

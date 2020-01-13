@@ -36,7 +36,7 @@ class _ShoppingState extends State<Shopping> {
       pageController.jumpToPage(index);
       switch (selectBar) {
         case 0:
-          titleName = '京东商城';
+          titleName = '盛安德商城';
           break;
         case 1:
           titleName = '购物车';
@@ -64,7 +64,7 @@ class _ShoppingState extends State<Shopping> {
 
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '京东商城',
+      title: '盛安德商城',
       theme: ThemeData(primaryColor: Colors.redAccent),
       home: Scaffold(
         appBar: AppBar(
@@ -118,7 +118,7 @@ class _ShoppingState extends State<Shopping> {
 
 class SearchBarDelegate extends SearchDelegate<String> {
   @override
-  String searchFieldLabel = '搜商品';
+  String searchFieldLabel = '搜商品、搜店铺、嗖嗖嗖';
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -161,14 +161,23 @@ class SearchBarDelegate extends SearchDelegate<String> {
       return Padding(
           padding: const EdgeInsets.all(10.0),
           child: SuggestionTags(tagList: [
-            '辣鸡风景',
-            '辣鸡二狗',
-            '辣鸡大牙',
-            '辣鸡风景',
-            '辣鸡二狗',
-            '辣鸡大牙',
-            '辣鸡风景',
-            '辣鸡二狗'
+            '蒸羊羔',
+            '蒸熊掌',
+            '蒸鹿尾儿',
+            '烧花鸭',
+            '烧雏鸡',
+            '烧子鹅',
+            '卤🐷',
+            '卤鸭',
+            '酱🐔',
+            '腊肉',
+            '松花小肚儿',
+            '晾肉',
+            '香肠儿',
+            '什锦苏盘儿',
+            '熏鸡白肚儿',
+            '清蒸八宝猪',
+            '江米酿鸭子'
           ]));
     } else {
       return ListView.builder(
@@ -194,7 +203,6 @@ class SearchItem extends StatelessWidget {
       child: IconButton(
         icon: Icon(Icons.search),
         onPressed: () {
-          print('打开搜索啊');
           showSearch(context: context, delegate: SearchBarDelegate());
         },
       ),

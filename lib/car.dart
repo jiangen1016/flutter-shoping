@@ -364,6 +364,9 @@ class _GoodsNumState extends State<GoodsNum> {
                             print(int.parse(e));
                             if (int.parse(e) > 999) {
                               numberController.text = '999';
+                              setState(() {
+                                countText = '999';
+                              });
                             } else {
                               numberController.text = e;
                             }

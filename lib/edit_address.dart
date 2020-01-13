@@ -72,16 +72,6 @@ class _EditAddressState extends State<EditAddress> {
       body: AddressForm(
         index: widget.index,
       ),
-      // body: Provider(
-      //   builder: () => {},
-      //   child: AddressForm(
-      //     index: widget.index,
-      //   ),
-      // )
-      // ChangeNotifierProvider<AddressData>.value(
-      //   value: AddressData(),
-      //   child:
-      // ),
     );
   }
 }
@@ -99,11 +89,12 @@ class _AddressFormState extends State<AddressForm> {
   TextEditingController _phone = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _address = TextEditingController();
+  TextEditingController _cityAndArea = TextEditingController();
+  AddressModel currentUser;
   String _province;
   String _areaName;
   bool _isNew = false;
-  AddressModel currentUser;
-  var _isDefaultAddress = false;
+  bool _isDefaultAddress = false;
   String _locationCode;
   GlobalKey _formKey = new GlobalKey<FormState>();
 
@@ -113,14 +104,21 @@ class _AddressFormState extends State<AddressForm> {
         context: context, locationCode: _locationCode);
     print(result);
     if (result != null) {
-      _city.text = '${result.provinceName + result.cityName + result.areaName}';
+      _cityAndArea.text =
+          '${result.provinceName + result.cityName + result.areaName}';
+      _city.text = result.cityName;
       _province = result.provinceName;
       _areaName = result.areaName;
-
       setState(() {
         _locationCode = result.areaId;
       });
     }
+  }
+
+  static bool isPhone(String str) {
+    return RegExp(
+            '^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$')
+        .hasMatch(str);
   }
 
   _submitAddress(BuildContext context) {
@@ -130,15 +128,22 @@ class _AddressFormState extends State<AddressForm> {
       print('可以提交');
       print(
           '${_name.text}、${_phone.text}、${_city.text}、${_address.text}、${_isDefaultAddress.toString()}');
-      var addressModel = AddressModel(_name.text, _phone.text, _province,
-          _locationCode, _city.text, _areaName, _address.text);
+      var addressModel = AddressModel(
+          _name.text,
+          _phone.text,
+          _province,
+          _locationCode,
+          _city.text,
+          _areaName,
+          _address.text,
+          _isDefaultAddress);
       if (_isNew) {
         Provider.of<AddressData>(context).addAddrssItem(addressModel);
-        Navigator.of(context).pop('添加地址成功');
+        Navigator.of(context).pop('添加成功');
       } else {
         Provider.of<AddressData>(context)
             .editAddressItem(widget.index, addressModel);
-        Navigator.of(context).pop('修改地址成功');
+        Navigator.of(context).pop('保存成功');
       }
     }
   }
@@ -154,12 +159,20 @@ class _AddressFormState extends State<AddressForm> {
       } else {
         currentUser =
             Provider.of<AddressData>(context).addressList[widget.index];
+        print(currentUser.toString());
         _name.text = currentUser.userName;
         _address.text = currentUser.address;
+        _areaName = currentUser.area;
         _province = currentUser.province;
-        _city.text = currentUser.province + currentUser.city + currentUser.area;
+        _city.text = currentUser.city;
+        _cityAndArea.text =
+            currentUser.province + currentUser.city + currentUser.area;
         _phone.text = currentUser.phone;
         _locationCode = currentUser.locationCode;
+        setState(() {
+          _isDefaultAddress = currentUser.isDefault;
+        });
+        print(_isDefaultAddress);
       }
     });
   }
@@ -223,8 +236,12 @@ class _AddressFormState extends State<AddressForm> {
                             child: TextFormField(
                               controller: _phone,
                               validator: (v) {
+                                print(v);
                                 if (v.trim().length <= 0) {
                                   return '手机号码不能为空';
+                                } else if (isPhone(v.toString()) != true ||
+                                    v.trim().length != 11) {
+                                  return '手机号格式不正确';
                                 }
                               },
                               keyboardType: TextInputType.number,
@@ -250,8 +267,9 @@ class _AddressFormState extends State<AddressForm> {
                             padding:
                                 const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                             child: TextFormField(
-                              controller: _city,
+                              controller: _cityAndArea,
                               onTap: _showCistPicker,
+                              readOnly: true,
                               validator: (v) {
                                 if (v.trim().length <= 0) {
                                   return '所在地区不能为空';
@@ -298,45 +316,45 @@ class _AddressFormState extends State<AddressForm> {
                         ),
                       ],
                     )),
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 60.0,
-                          child: Text('标签'),
-                        ),
-                        Wrap(
-                          children: <Widget>[
-                            ChoiceChip(
-                              label: Text(
-                                '家',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              selected: true,
-                              selectedColor: Colors.redAccent,
-                              onSelected: (bool selected) {},
-                            ),
-                            ChoiceChip(
-                              label: Text('公司',
-                                  style: TextStyle(color: Colors.black)),
-                              selected: false,
-                              backgroundColor: Color(0xffdcdcdc),
-                              selectedColor: Colors.redAccent,
-                              onSelected: (bool selected) {},
-                            ),
-                            ChoiceChip(
-                              label: Text('学校',
-                                  style: TextStyle(color: Colors.black)),
-                              selected: false,
-                              backgroundColor: Color(0xffdcdcdc),
-                              selectedColor: Colors.redAccent,
-                              onSelected: (bool selected) {},
-                            )
-                          ],
-                        )
-                      ],
-                    )),
+                // Padding(
+                //     padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                //     child: Row(
+                //       children: [
+                //         Container(
+                //           width: 60.0,
+                //           child: Text('标签'),
+                //         ),
+                //         Wrap(
+                //           children: <Widget>[
+                //             ChoiceChip(
+                //               label: Text(
+                //                 '家',
+                //                 style: TextStyle(color: Colors.white),
+                //               ),
+                //               selected: true,
+                //               selectedColor: Colors.redAccent,
+                //               onSelected: (bool selected) {},
+                //             ),
+                //             ChoiceChip(
+                //               label: Text('公司',
+                //                   style: TextStyle(color: Colors.black)),
+                //               selected: false,
+                //               backgroundColor: Color(0xffdcdcdc),
+                //               selectedColor: Colors.redAccent,
+                //               onSelected: (bool selected) {},
+                //             ),
+                //             ChoiceChip(
+                //               label: Text('学校',
+                //                   style: TextStyle(color: Colors.black)),
+                //               selected: false,
+                //               backgroundColor: Color(0xffdcdcdc),
+                //               selectedColor: Colors.redAccent,
+                //               onSelected: (bool selected) {},
+                //             )
+                //           ],
+                //         )
+                //       ],
+                //     )),
                 Padding(
                     padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                     child: Row(

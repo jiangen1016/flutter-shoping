@@ -30,7 +30,8 @@ class _AddressMainState extends State<AddressMain> {
           item['locationCode'],
           item['city'],
           item['area'],
-          item['address'])));
+          item['address'],
+          item['isDefault'])));
       setState(() {
         _addressList = address;
       });
@@ -112,8 +113,10 @@ class _AddressMainState extends State<AddressMain> {
                                     if (res != null)
                                       {
                                         Scaffold.of(context)
+                                            .hideCurrentSnackBar(),
+                                        Scaffold.of(context)
                                             .showSnackBar(SnackBar(
-                                          content: Text('添加地址成功'),
+                                          content: Text('添加成功'),
                                         ))
                                       }
                                   });
@@ -202,6 +205,7 @@ class _AddressItemState extends State<AddressItem> {
                   ),
                   alignment: Alignment.centerRight,
                   onPressed: () {
+                    Scaffold.of(context).hideCurrentSnackBar();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
