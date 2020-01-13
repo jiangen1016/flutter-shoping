@@ -16,7 +16,7 @@ class _GoodsItemState extends State<GoodsItem> {
   @override
   Widget build(BuildContext context) {
     var item = widget.goodList[widget.index];
-    return Container(
+    return  Container(
       child: Column(
         children: <Widget>[
           Container(
@@ -24,8 +24,8 @@ class _GoodsItemState extends State<GoodsItem> {
             padding: const EdgeInsets.all(10.0),
             child: Image.network(item.url),
           ),
-          Padding(
-              padding: const EdgeInsets.all(10.0),
+          Expanded(
+              // padding: const EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

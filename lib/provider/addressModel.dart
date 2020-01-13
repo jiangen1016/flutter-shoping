@@ -16,5 +16,15 @@ class AddressData with ChangeNotifier {
     notifyListeners();
   }
 
+  addAddrssItem(AddressModel address) {
+    this.addressList.add(address);
+    notifyListeners();
+  }
+
+  editAddressItem(int index, AddressModel address) {
+    this.addressList.removeAt(index);
+    this.addressList.insert(index, address);
+  }
+
   get getAddressList => this.addressList;
 }

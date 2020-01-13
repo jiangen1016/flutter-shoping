@@ -161,12 +161,11 @@ class GoodsTool extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: Container(
                       child: Row(
                         children: <Widget>[
-                          Expanded(
-                              child: RaisedButton(
+                          RaisedButton(
                             onPressed: () {
                               Scaffold.of(context).showSnackBar(SnackBar(
                                 content: Text('添加购物车成功'),
@@ -175,15 +174,13 @@ class GoodsTool extends StatelessWidget {
                             child: Text('加入购车'),
                             textColor: Colors.white,
                             color: const Color(0xFFFFb000),
-                          )),
-                          Expanded(
-                            child: RaisedButton(
-                              onPressed: () {},
-                              child: Text('立即购买'),
-                              textColor: Colors.white,
-                              color: const Color(0xFFFF2000),
-                            ),
-                          )
+                          ),
+                          RaisedButton(
+                            onPressed: () {},
+                            child: Text('立即购买'),
+                            textColor: Colors.white,
+                            color: const Color(0xFFFF2000),
+                          ),
                         ],
                       ),
                     )),

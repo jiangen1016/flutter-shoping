@@ -32,7 +32,6 @@ class _AdviceItemState extends State<AdviceItem> {
               style: TextStyle(fontSize: 12.0),
             ),
             Container(
-              height: 100.0,
               child: Image.network(item.url),
             )
           ],

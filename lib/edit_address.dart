@@ -22,10 +22,6 @@ class _EditAddressState extends State<EditAddress> {
 
   @override
   Widget build(BuildContext context) {
-    // var addressData = Provider.of<AddressData>(context);
-    // print(widget.index);
-    // print(addressData.addressList[widget.index]);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('编辑收货地址'),
@@ -103,6 +99,9 @@ class _AddressFormState extends State<AddressForm> {
   TextEditingController _phone = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _address = TextEditingController();
+  String _province;
+  String _areaName;
+  bool _isNew = false;
   AddressModel currentUser;
   var _isDefaultAddress = false;
   String _locationCode;
@@ -115,6 +114,9 @@ class _AddressFormState extends State<AddressForm> {
     print(result);
     if (result != null) {
       _city.text = '${result.provinceName + result.cityName + result.areaName}';
+      _province = result.provinceName;
+      _areaName = result.areaName;
+
       setState(() {
         _locationCode = result.areaId;
       });
@@ -122,17 +124,22 @@ class _AddressFormState extends State<AddressForm> {
   }
 
   _submitAddress(BuildContext context) {
-    //  如果是Form的自组件，可以直接调用这个方法
-    // if (Form.of(context).validate()) {
-    //   print('可以提交');
-    // }
     var currentForm = (_formKey.currentState as FormState);
     if (currentForm.validate()) {
       currentForm.save();
       print('可以提交');
       print(
           '${_name.text}、${_phone.text}、${_city.text}、${_address.text}、${_isDefaultAddress.toString()}');
-      Navigator.of(context).pop('添加地址成功');
+      var addressModel = AddressModel(_name.text, _phone.text, _province,
+          _locationCode, _city.text, _areaName, _address.text);
+      if (_isNew) {
+        Provider.of<AddressData>(context).addAddrssItem(addressModel);
+        Navigator.of(context).pop('添加地址成功');
+      } else {
+        Provider.of<AddressData>(context)
+            .editAddressItem(widget.index, addressModel);
+        Navigator.of(context).pop('修改地址成功');
+      }
     }
   }
 
@@ -141,13 +148,19 @@ class _AddressFormState extends State<AddressForm> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 这个是在页面绘制完成后回调， 那个时候肯定是有context 的
-      currentUser = Provider.of<AddressData>(context).addressList[widget.index];
-      print(currentUser);
-      _name.text = currentUser.userName;
-      _address.text = currentUser.address;
-      _city.text = currentUser.province + currentUser.city + currentUser.area;
-      _phone.text = currentUser.phone;
-      _locationCode = currentUser.locationCode;
+      print(widget.index);
+      if (widget.index == null) {
+        _isNew = true;
+      } else {
+        currentUser =
+            Provider.of<AddressData>(context).addressList[widget.index];
+        _name.text = currentUser.userName;
+        _address.text = currentUser.address;
+        _province = currentUser.province;
+        _city.text = currentUser.province + currentUser.city + currentUser.area;
+        _phone.text = currentUser.phone;
+        _locationCode = currentUser.locationCode;
+      }
     });
   }
 

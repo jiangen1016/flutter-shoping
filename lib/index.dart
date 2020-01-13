@@ -153,7 +153,7 @@ class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
                 crossAxisSpacing: 0.0,
                 childAspectRatio: 2 / 3),
             itemBuilder: (BuildContext context, int index) {
-              return GoodsItem(
+              return  GoodsItem(
                 goodList: goodsList,
                 index: index,
               );

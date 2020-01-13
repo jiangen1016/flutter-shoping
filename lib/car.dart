@@ -361,7 +361,12 @@ class _GoodsNumState extends State<GoodsNum> {
                                           affinity: TextAffinity.downstream,
                                           offset: countText.length)))),
                           onChanged: (e) {
-                            numberController.text = e;
+                            print(int.parse(e));
+                            if (int.parse(e) > 999) {
+                              numberController.text = '999';
+                            } else {
+                              numberController.text = e;
+                            }
                           },
                         ),
                         actions: <Widget>[

@@ -16,6 +16,11 @@ class _AddressMainState extends State<AddressMain> {
 
   @override
   void initState() {
+    _getlistFun();
+    super.initState();
+  }
+
+  _getlistFun() {
     _getList().then((res) {
       print(res);
       var address = List<AddressModel>.from(res.map((item) => AddressModel(
@@ -34,12 +39,15 @@ class _AddressMainState extends State<AddressMain> {
         Provider.of<AddressData>(context).setAddressList(_addressList);
       });
     });
-    super.initState();
   }
 
   Future _getList() async {
     return await HttpUtils.request(
         'https://www.fastmock.site/mock/b7b1c8dd0f5250ffc71c0d191e06758b/dio/getAddress');
+  }
+
+  Future _onRefresh() async {
+    await _getlistFun();
   }
 
   @override
@@ -54,24 +62,27 @@ class _AddressMainState extends State<AddressMain> {
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
               child: Stack(
                 children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 55.0),
-                    child: ListView.builder(
-                      itemCount: addressList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      width: 1, color: Color(0xffe5e5e5)))),
-                          child: addressList.length > 0
-                              ? AddressItem(
-                                  addressItem: addressList[index], index: index)
-                              : Container(),
-                        );
-                      },
-                    ),
-                  ),
+                  RefreshIndicator(
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 55.0),
+                        child: ListView.builder(
+                          itemCount: addressList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          width: 1, color: Color(0xffe5e5e5)))),
+                              child: addressList.length > 0
+                                  ? AddressItem(
+                                      addressItem: addressList[index],
+                                      index: index)
+                                  : Container(),
+                            );
+                          },
+                        ),
+                      ),
+                      onRefresh: _onRefresh),
                   Positioned(
                     bottom: 15.0,
                     left: 0,
@@ -201,7 +212,7 @@ class _AddressItemState extends State<AddressItem> {
                             {
                               Scaffold.of(context).hideCurrentSnackBar(),
                               Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text('删除成功'),
+                                content: Text(res),
                               ))
                             }
                         });

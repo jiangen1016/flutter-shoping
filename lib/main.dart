@@ -118,6 +118,9 @@ class _ShoppingState extends State<Shopping> {
 
 class SearchBarDelegate extends SearchDelegate<String> {
   @override
+  String searchFieldLabel = '搜商品';
+
+  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
@@ -175,7 +178,6 @@ class SearchBarDelegate extends SearchDelegate<String> {
               padding: const EdgeInsets.all(10.0),
               child: ListTile(
                 title: Text(suggestionList),
-                subtitle: Text(index.toString()),
               ),
             );
           });
