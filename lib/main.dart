@@ -1,10 +1,14 @@
 import 'package:first_flutter/car.dart';
 import 'package:first_flutter/index.dart';
+import 'package:first_flutter/result.dart';
 import 'package:first_flutter/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 
+import 'http/http.dart';
 import 'provider/addressModel.dart';
+import 'provider/searchModel.dart';
 
 void main() => runApp(ChangeNotifierProvider.value(
       value: AddressData(),
@@ -119,6 +123,10 @@ class _ShoppingState extends State<Shopping> {
 class SearchBarDelegate extends SearchDelegate<String> {
   @override
   String searchFieldLabel = '搜商品、搜店铺、嗖嗖嗖';
+  Timer timer;
+  Duration durationTime = Duration(seconds: 2);
+
+  String _queryParams;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -148,49 +156,67 @@ class SearchBarDelegate extends SearchDelegate<String> {
         });
   }
 
+  Future _getList() async {
+    return await HttpUtils.request(
+        'https://www.fastmock.site/mock/b7b1c8dd0f5250ffc71c0d191e06758b/dio/getAddress');
+  }
+
   @override
   Widget buildResults(BuildContext context) {
-    return Text('123');
+    final suggestionList = query.toString();
+
+    return ResultPage();
+    // Future.delayed(Duration(seconds: 2), () {
+    //   return ListView.builder(
+    //       itemCount: 10,
+    //       itemBuilder: (BuildContext context, int index) {
+    //         return Padding(
+    //           padding: const EdgeInsets.all(10.0),
+    //           child: ListTile(
+    //             title: Text(suggestionList),
+    //           ),
+    //         );
+    //       });
+    // });
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestionList = query.toString();
     final isEmpty = query.isEmpty;
-    if (isEmpty) {
-      return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: SuggestionTags(tagList: [
-            '蒸羊羔',
-            '蒸熊掌',
-            '蒸鹿尾儿',
-            '烧花鸭',
-            '烧雏鸡',
-            '烧子鹅',
-            '卤🐷',
-            '卤鸭',
-            '酱🐔',
-            '腊肉',
-            '松花小肚儿',
-            '晾肉',
-            '香肠儿',
-            '什锦苏盘儿',
-            '熏鸡白肚儿',
-            '清蒸八宝猪',
-            '江米酿鸭子'
-          ]));
-    } else {
-      return ListView.builder(
-          itemCount: 10,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ListTile(
-                title: Text(suggestionList),
-              ),
-            );
-          });
-    }
+    return Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SuggestionTags(tagList: [
+          '蒸羊羔',
+          '蒸熊掌',
+          '蒸鹿尾儿',
+          '烧花鸭',
+          '烧雏鸡',
+          '烧子鹅',
+          '卤🐷',
+          '卤鸭',
+          '酱🐔',
+          '腊肉',
+          '松花小肚儿',
+          '晾肉',
+          '香肠儿',
+          '什锦苏盘儿',
+          '熏鸡白肚儿',
+          '清蒸八宝猪',
+          '江米酿鸭子'
+        ]));
+
+    // ListView.builder(
+    //     itemCount: 10,
+    //     itemBuilder: (BuildContext context, int index) {
+    //       return Padding(
+    //         padding: const EdgeInsets.all(10.0),
+    //         child: ListTile(
+    //           title: Text('1'),
+    //         ),
+    //       );
+    //     });
+    // });
   }
 }
 

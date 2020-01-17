@@ -22,7 +22,7 @@ class _GoodsDetailState extends State<GoodsDetail> {
     return Scaffold(
       appBar: AppBar(title: Text('商品详情')),
       body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: Stack(
             children: <Widget>[
               ListView(
@@ -30,11 +30,13 @@ class _GoodsDetailState extends State<GoodsDetail> {
                   Container(
                     height: 375.0,
                     child: Swiper(
-                        itemCount: goodsImgs.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Image.network(goodsImgs[index],
-                              fit: BoxFit.fill);
-                        }),
+                      itemCount: goodsImgs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Image.network(goodsImgs[index],
+                            fit: BoxFit.fill);
+                      },
+                      pagination: SwiperPagination(),
+                    ),
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 10.0),
@@ -165,22 +167,52 @@ class GoodsTool extends StatelessWidget {
                     child: Container(
                       child: Row(
                         children: <Widget>[
-                          RaisedButton(
-                            onPressed: () {
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text('添加购物车成功'),
-                              ));
-                            },
-                            child: Text('加入购车'),
-                            textColor: Colors.white,
-                            color: const Color(0xFFFFb000),
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                                alignment: Alignment.center,
+                                color: Color(0xFFFFb000),
+                                child: Text('购物车',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                            ),
                           ),
-                          RaisedButton(
-                            onPressed: () {},
-                            child: Text('立即购买'),
-                            textColor: Colors.white,
-                            color: const Color(0xFFFF2000),
-                          ),
+
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                                alignment: Alignment.center,
+                                color: Color(0xFFFF2000),
+                                child: Text('立即购买',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    )),
+                              ),
+                            ),
+                          )
+
+                          // RaisedButton(
+                          //   onPressed: () {
+                          //     Scaffold.of(context).showSnackBar(SnackBar(
+                          //       content: Text('添加购物车成功'),
+                          //     ));
+                          //   },
+                          //   child: Text('加入购物车'),
+                          //   textColor: Colors.white,
+                          //   color: const Color(0xFFFFb000),
+                          // ),
+                          // RaisedButton(
+                          //   onPressed: () {},
+                          //   child: Text('立即购买'),
+                          //   textColor: Colors.white,
+                          //   color: const Color(0xFFFF2000),
+                          // ),
                         ],
                       ),
                     )),

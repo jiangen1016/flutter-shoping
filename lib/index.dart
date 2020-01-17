@@ -71,7 +71,7 @@ class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1000.0,
+      // height: 1000.0,
       child: ListView(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
@@ -85,7 +85,6 @@ class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () {
-                      print(imageUrls[index]);
                       Navigator.push(
                           context,
                           MaterialPageRoute(

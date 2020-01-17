@@ -2,10 +2,10 @@ import 'package:first_flutter/model/index.dart';
 
 // banner
 var returnImageUrls = [
-  'http://imgcps.jd.com/ling4/100004485766/5LyR6Zey6Zu26aOf5q2j5ZOB6LSn/562J552A5L2g5p2l5oyR/p-5c13869682acdd181deefebe/9cb57cc1/cr_1125x445_0_171/s1125x690/q70.jpg',
-  'http://m.360buyimg.com/mobilecms/s700x280_jfs/t1/84115/2/11561/185347/5d904493E50938ab3/a349d6d629fb2e40.jpg!cr_1125x445_0_171!q70.jpg',
-  'http://m.360buyimg.com/mobilecms/s700x280_jfs/t1/58494/14/12116/87375/5d91d3faE56ea1096/b02d8a25c604f4cf.jpg!cr_1125x445_0_171!q70.jpg.dpg',
-  "http://m.360buyimg.com/mobilecms/s700x280_jfs/t1/29602/28/6448/147417/5c5018e1Ed6bdfbfe/44777b12d731ad4b.jpg!cr_1125x445_0_171!q70.jpg.dpg"
+  'http://m.360buyimg.com/mobilecms/s700x280_jfs/t1/109998/10/4119/98455/5e1848d4Ee5594730/b91a7b6a0356cecf.jpg!cr_1125x445_0_171!q70.jpg.dpg',
+  'http://m.360buyimg.com/mobilecms/s700x280_jfs/t1/98720/27/8984/65321/5e0aa7f5E47e8b2d8/eff26193e1aa3ed5.jpg!cr_1125x445_0_171!q70.jpg.dpg',
+  'http://m.360buyimg.com/mobilecms/s700x280_jfs/t1/94955/11/9871/88699/5e146887E5928b393/b72032619b154ad2.jpg!cr_1125x445_0_171!q70.jpg.dpg',
+  "http://imgcps.jd.com/ling4/100002795959/5omL5py66LSt5a6e5oOg/5aSH6LSn6LaF5YC8/p-5c13869682acdd181deeff13/feced15b/cr_1125x445_0_171/s1125x690/q70.jpg"
 ];
 // 分类
 var returnCategoryList = [

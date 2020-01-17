@@ -109,17 +109,14 @@ class _AddressMainState extends State<AddressMain> {
                                   MaterialPageRoute(
                                       builder: (context) => EditAddress(
                                             isNew: true,
-                                          ))).then((res) => {
-                                    if (res != null)
-                                      {
-                                        Scaffold.of(context)
-                                            .hideCurrentSnackBar(),
-                                        Scaffold.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text('添加成功'),
-                                        ))
-                                      }
-                                  });
+                                          ))).then((res) {
+                                if (res != null) {
+                                  Scaffold.of(context).hideCurrentSnackBar();
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text('添加成功'),
+                                  ));
+                                }
+                              });
                             },
                             child: Center(
                               child: Text(
@@ -185,7 +182,7 @@ class _AddressItemState extends State<AddressItem> {
                       ]),
                 ),
                 Text(
-                  '${widget.addressItem.province}${widget.addressItem.city}${widget.addressItem.address}',
+                  '${widget.addressItem.province}${widget.addressItem.city}${widget.addressItem.area}${widget.addressItem.address}',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 )
@@ -216,8 +213,8 @@ class _AddressItemState extends State<AddressItem> {
                             {
                               Scaffold.of(context).hideCurrentSnackBar(),
                               Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text(res),
-                              ))
+                                  content: Text(res),
+                                  duration: Duration(seconds: 1)))
                             }
                         });
                   },

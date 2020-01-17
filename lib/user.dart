@@ -1,8 +1,9 @@
 import 'package:first_flutter/address.dart';
+import 'package:first_flutter/login.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'provider/addressModel.dart';
+// import 'package:provider/provider.dart';
+// import 'provider/addressModel.dart';
 
 void main() => runApp(User());
 
@@ -41,6 +42,20 @@ class _UserState extends State<User> with AutomaticKeepAliveClientMixin {
                   child: Container(
                       child: ListTile(
                         title: Text('我的地址'),
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  width: 1, color: Color(0xffe5e5e5))))),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
+                  child: Container(
+                      child: ListTile(
+                        title: Text('退出登录'),
                       ),
                       decoration: BoxDecoration(
                           border: Border(
