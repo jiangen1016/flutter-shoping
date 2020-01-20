@@ -159,7 +159,6 @@ class _AddressItemState extends State<AddressItem> {
 
   @override
   Widget build(BuildContext context) {
-    var addressData = Provider.of<AddressData>(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0),
       padding: const EdgeInsets.all(10.0),

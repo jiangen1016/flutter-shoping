@@ -13,6 +13,10 @@ class CarData with ChangeNotifier {
     notifyListeners();
   }
 
+  bool isEmpty() {
+    return _carList.length < 1 ? true : false;
+  }
+
   delItem(int index) {
     _carList.removeAt(index);
     notifyListeners();
@@ -50,13 +54,13 @@ class CarData with ChangeNotifier {
   chooseAll() {
     var _isChooseAll = _carList.every((item) => item.isChoosed);
     _carList.forEach((item) => item.isChoosed = !_isChooseAll);
-
     notifyListeners();
   }
 
   get carList => _carList;
   set carlist(res) {
     this._carList = res;
+    notifyListeners();
   }
 
   double get totalPrice => getTotalPrice().toDouble();

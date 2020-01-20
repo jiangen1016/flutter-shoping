@@ -24,7 +24,19 @@ class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
   initState() {
     super.initState();
     print('car page init');
-    this.getMycarList();
+    // widget 绘制完毕后
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      bool isEmpty = Provider.of<CarData>(context).isEmpty();
+      if (isEmpty) {
+        this.getMycarList();
+      } else {
+        List<CarItem> carList = Provider.of<CarData>(context).carList;
+        print(carList);
+        setState(() {
+          carData = carList;
+        });
+      }
+    });
     // this.carData = [
     //   // CarItem('Apple 苹果x iPhonex 全面屏 手机', 4888, 1,
     //   //     'http://img10.360buyimg.com/mobilecms/s234x234_jfs/t12352/88/127708421/67468/90baaf73/5a04172aN29f845bf.jpg!q70.dpg.webp'),
@@ -47,9 +59,10 @@ class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
           item['goodCount'],
           item['goodsImg'],
           item['isChoosed'])));
-      setState(() {
-        carData = data;
-      });
+      Provider.of<CarData>(context).carlist = data;
+      // setState(() {
+      //   carData = data;
+      // });
     });
   }
 
@@ -78,24 +91,16 @@ class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
 
     var isFromBar = widget.isFromBar != null ? true : false;
     if (isFromBar) {
-      return ChangeNotifierProvider<CarData>.value(
-        value: CarData(carData),
-        child: Container(
-            child: ReturnCarMain(
-          callBack: getMycarList,
-        )),
+      return ReturnCarMain(
+        callBack: getMycarList,
       );
     } else {
       return Scaffold(
           appBar: AppBar(
             title: Text('我的购物车'),
           ),
-          body: ChangeNotifierProvider<CarData>.value(
-            value: CarData(carData),
-            child: Container(
-                child: ReturnCarMain(
-              callBack: getMycarList,
-            )),
+          body: ReturnCarMain(
+            callBack: getMycarList,
           ));
     }
   }

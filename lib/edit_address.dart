@@ -99,9 +99,9 @@ class _AddressFormState extends State<AddressForm> {
   GlobalKey _formKey = new GlobalKey<FormState>();
 
   _showCistPicker() async {
-    print(_locationCode);
+    print(_locationCode.toString());
     Result result = await CityPickers.showCityPicker(
-        context: context, locationCode: _locationCode);
+        context: context, locationCode: _locationCode.toString());
     print(result);
     if (result != null) {
       _cityAndArea.text =

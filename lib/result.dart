@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading/loading.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 
 class ResultPage extends StatefulWidget {
@@ -28,10 +29,15 @@ class _ResultPageState extends State<ResultPage> {
     return Container(
       child: _hasSearch
           ? Center(
-              child: Loading(
-                  indicator: BallPulseIndicator(),
-                  size: 100.0,
-                  color: Colors.grey),
+              child:
+                  //  CupertinoActivityIndicator(
+                  //   radius: 30.0,
+                  //   animating: false,
+                  // ),
+                  Loading(
+                      indicator: BallPulseIndicator(),
+                      size: 100.0,
+                      color: Colors.grey),
             )
           : ListView.builder(
               itemCount: 10,

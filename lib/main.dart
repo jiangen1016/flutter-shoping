@@ -1,5 +1,6 @@
 import 'package:first_flutter/car.dart';
 import 'package:first_flutter/index.dart';
+import 'package:first_flutter/provider/carModel.dart';
 import 'package:first_flutter/result.dart';
 import 'package:first_flutter/user.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,21 @@ import 'http/http.dart';
 import 'provider/addressModel.dart';
 import 'provider/searchModel.dart';
 
-void main() => runApp(ChangeNotifierProvider.value(
-      value: AddressData(),
-      child: Shopping(),
-    ));
+void main() => runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(builder: (_) => AddressData()),
+          ChangeNotifierProvider(builder: (_) => CarData([])),
+          // Provider<AddressData>.value(value: AddressData()),
+          // Provider<CarData>.value(value: CarData([])),
+        ],
+        child: Shopping(),
+      ),
+      // ChangeNotifierProvider.value(
+      //   value: AddressData(),
+      //   child: Shopping(),
+      // )
+    );
 
 class Shopping extends StatefulWidget {
   Shopping({Key key}) : super(key: key);
