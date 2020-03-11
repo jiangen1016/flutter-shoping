@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
+import 'main.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -10,14 +13,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> loginKey = new GlobalKey<FormState>();
 
-  void _login() {
-    var loginFormController = loginKey.currentState;
-    if (loginFormController.validate()) {
-      print(userName.text);
-      print(userPass.text);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -26,6 +21,28 @@ class _LoginPageState extends State<LoginPage> {
   var userName = TextEditingController();
   var userPass = TextEditingController();
   bool isRemmber = false;
+  bool _isLogin = false;
+  String _userName = '';
+  String _userPass = '';
+
+  void _login() {
+    var loginFormController = loginKey.currentState;
+    if (loginFormController.validate()) {
+      print(userName.text);
+      print(userPass.text);
+      setState(() {
+        _isLogin = true;
+      });
+      Future.delayed(Duration(seconds: 2)).then((res) {
+        setState(() {
+          _isLogin = false;
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(builder: (context) => Shopping()),
+              (route) => route == null);
+        });
+      });
+    } else {}
+  }
 
   UnderlineInputBorder _focusedBorderStyle = UnderlineInputBorder(
       borderSide: BorderSide(
@@ -37,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        // backgroundColor: Colors.blueAccent,
         title: Text('登录'),
       ),
       body: Center(
@@ -55,19 +72,41 @@ class _LoginPageState extends State<LoginPage> {
                         child: Image.asset('lib/assets/logo.png'),
                       )),
                   TextFormField(
-                    controller: userName,
+                    controller: TextEditingController.fromValue(
+                        TextEditingValue(
+                            // 设置内容
+                            text: _userName,
+                            // 保持光标在最后
+                            selection: TextSelection.fromPosition(TextPosition(
+                                affinity: TextAffinity.downstream,
+                                offset: _userName.length)))),
                     decoration: InputDecoration(
                       // labelText: '用户名',
                       hintText: '用户名',
                       labelStyle: TextStyle(color: Colors.black),
                       focusedBorder: _focusedBorderStyle,
                     ),
+                    onChanged: (val) {
+                      setState(() {
+                        _userName = val;
+                      });
+                    },
                     validator: (e) {
-                      return e.length < 1 ? '用户名必须输入' : '';
+                      print(e.length);
+                      if (e.length < 1) {
+                        return '用户名必须输入';
+                      } else if (e.length < 6) {
+                        return '用户名不能小于6位数';
+                      }
                     },
                   ),
                   TextFormField(
-                    controller: userPass,
+                    controller: TextEditingController.fromValue(
+                        TextEditingValue(
+                            text: _userPass,
+                            selection: TextSelection.fromPosition(TextPosition(
+                                affinity: TextAffinity.downstream,
+                                offset: _userPass.length)))),
                     obscureText: true,
                     decoration: InputDecoration(
                       // labelText: '密码',
@@ -82,6 +121,11 @@ class _LoginPageState extends State<LoginPage> {
                         return '密码不能小于6位数';
                       }
                     },
+                    onChanged: (val) {
+                      setState(() {
+                        _userPass = val;
+                      });
+                    },
                   ),
                   Container(
                     child: Row(
@@ -93,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                               children: <Widget>[
                                 Checkbox(
                                     value: isRemmber,
-                                    activeColor: Colors.blueAccent,
+                                    activeColor: Colors.redAccent,
                                     onChanged: (val) {
                                       setState(() {
                                         isRemmber = !isRemmber;
@@ -112,10 +156,10 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              print('点击了注册');
+                              print('点击了忘记密码');
                             },
                             child: Text(
-                              '注册',
+                              '忘记密码',
                               style: TextStyle(color: Colors.grey),
                             ),
                           )
@@ -132,10 +176,21 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: EdgeInsets.all(12),
                                 child: Text('登录'),
                                 textColor: Colors.white,
-                                color: Colors.blueAccent,
+                                color: Colors.redAccent,
                               ))
                         ],
-                      ))
+                      )),
+                  _isLogin
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: CupertinoActivityIndicator(
+                              radius: 20.0,
+                              animating: _isLogin,
+                            ),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             )),

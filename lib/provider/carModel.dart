@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 
 //  定义一个共享数据的widget
 class CarData with ChangeNotifier {
-  List<CarItem> _carList;
-  CarData(this._carList);
+  List<CarItem> _carList = [];
+  CarData();
 
   // 商品选中不选中
   valueChanged(index) {
@@ -58,7 +58,14 @@ class CarData with ChangeNotifier {
   }
 
   get carList => _carList;
-  set carlist(res) {
+  set carList(res) {
+    this._carList = res;
+    print('123123123');
+    print(res);
+    notifyListeners();
+  }
+
+  setCarlist(res) {
     this._carList = res;
     notifyListeners();
   }

@@ -1,3 +1,4 @@
+import 'package:first_flutter/detail.dart';
 import 'package:first_flutter/model/index.dart';
 import 'package:first_flutter/provider/carModel.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'http/http.dart';
-
-void main() => runApp(MyCart());
 
 class MyCart extends StatefulWidget {
   final String msg;
@@ -24,14 +23,17 @@ class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
   initState() {
     super.initState();
     print('car page init');
+    // print(Provider.of<CarData>(context).carList);
     // widget 绘制完毕后
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      bool isEmpty = Provider.of<CarData>(context).isEmpty();
+      print('test');
+      var isEmpty = Provider.of<CarData>(context, listen: false).isEmpty();
+      print(isEmpty);
       if (isEmpty) {
         this.getMycarList();
       } else {
-        List<CarItem> carList = Provider.of<CarData>(context).carList;
-        print(carList);
+        List<CarItem> carList =
+            Provider.of<CarData>(context, listen: false).carList;
         setState(() {
           carData = carList;
         });
@@ -59,10 +61,10 @@ class _MyCartState extends State<MyCart> with AutomaticKeepAliveClientMixin {
           item['goodCount'],
           item['goodsImg'],
           item['isChoosed'])));
-      Provider.of<CarData>(context).carlist = data;
-      // setState(() {
-      //   carData = data;
-      // });
+      Provider.of<CarData>(context, listen: false).setCarlist(data);
+      setState(() {
+        carData = data;
+      });
     });
   }
 
@@ -122,8 +124,7 @@ class ReturnCarMain extends StatefulWidget {
 class _ReturnCarMainState extends State<ReturnCarMain> {
   @override
   Widget build(BuildContext context) {
-    var carData = Provider.of<CarData>(context);
-
+    var carData = Provider.of<CarData>(context, listen: false);
     return RefreshIndicator(
         child: Container(
           child: Padding(
@@ -134,6 +135,7 @@ class _ReturnCarMainState extends State<ReturnCarMain> {
                   Container(
                     margin: const EdgeInsets.only(bottom: 50.0),
                     child: ListView.builder(
+                        // itemCount: 0,
                         itemCount: carData.carList.length,
                         itemBuilder: (BuildContext context, int index) {
                           return GoodsItem(
@@ -262,7 +264,16 @@ class _GoodsItemState extends State<GoodsItem> {
                       children: <Widget>[
                         Expanded(
                           flex: 1,
-                          child: Image.network(item.goodsImg, fit: BoxFit.fill),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => GoodsDetail()));
+                            },
+                            child:
+                                Image.network(item.goodsImg, fit: BoxFit.fill),
+                          ),
                         ),
                         Expanded(
                           flex: 3,
@@ -272,8 +283,17 @@ class _GoodsItemState extends State<GoodsItem> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(0),
-                                child: Text(item.goodsName,
-                                    maxLines: 2, softWrap: true),
+                                child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  GoodsDetail()));
+                                    },
+                                    child: Text(
+                                      item.goodsName,
+                                    )),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(0),
@@ -353,7 +373,7 @@ class _GoodsNumState extends State<GoodsNum> {
                     context: context,
                     builder: (BuildContext contex) {
                       return AlertDialog(
-                        title: Text('修该商品数量'),
+                        title: Text('修改商品数量'),
                         content: TextField(
                           autofocus: true,
                           controller: TextEditingController.fromValue(

@@ -9,13 +9,17 @@ import 'dart:async';
 
 import 'http/http.dart';
 import 'provider/addressModel.dart';
-import 'provider/searchModel.dart';
+// import 'provider/searchModel.dart';
 
 void main() => runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(builder: (_) => AddressData()),
-          ChangeNotifierProvider(builder: (_) => CarData([])),
+          // Provider<AddressData>(create: (_) => AddressData()),
+          // Provider<CarData>(create: (_) => CarData())
+          // Provider<CarData>(create: (_) => CarData()),
+          // Provider<AddressData>(create: (_) => AddressData()),
+          ChangeNotifierProvider(create: (_) => AddressData()),
+          ChangeNotifierProvider(create: (_) => CarData()),
           // Provider<AddressData>.value(value: AddressData()),
           // Provider<CarData>.value(value: CarData([])),
         ],
@@ -35,7 +39,7 @@ class Shopping extends StatefulWidget {
 
 class _ShoppingState extends State<Shopping> {
   int selectBar = 0;
-  String titleName = '商城';
+  String titleName = '盛安德商城';
 
   List<Widget> _widgetOptions = [];
 
@@ -59,6 +63,9 @@ class _ShoppingState extends State<Shopping> {
           break;
         case 2:
           titleName = '用户中心';
+          break;
+        default:
+          titleName = '盛安德商城';
           break;
       }
     });

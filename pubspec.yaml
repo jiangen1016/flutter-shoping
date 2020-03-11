@@ -25,9 +25,10 @@ dependencies:
   cupertino_icons: ^0.1.2
   flutter_swiper: ^1.1.2
   dio: 3.0.3
+  url_launcher: ^5.4.2
   loading: ^1.0.2
   city_pickers: ^0.1.30
-  provider: ^3.1.0+1
+  provider: 4.0.4
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,9 @@ flutter:
   assets:
    - lib/assets/header.png
    - lib/assets/logo.png
+   - lib/assets/detail0.webp
+   - lib/assets/detail1.webp
+   - lib/assets/detail2.webp
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

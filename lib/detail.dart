@@ -2,7 +2,7 @@ import 'package:first_flutter/car.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
-void main() => runApp(GoodsDetail());
+// void main() => runApp(GoodsDetail());
 
 class GoodsDetail extends StatefulWidget {
   GoodsDetail({Key key}) : super(key: key);
@@ -84,7 +84,7 @@ class _GoodsDetailState extends State<GoodsDetail> {
                                   ],
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(left: 10.0),
+                                  margin: EdgeInsets.only(left: 10.0),
                                   child: Column(
                                     children: <Widget>[
                                       Icon(
@@ -104,23 +104,27 @@ class _GoodsDetailState extends State<GoodsDetail> {
                           ],
                         ),
                       ),
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                            text: "自营",
+                            style: TextStyle(
+                                color: Colors.redAccent, fontSize: 14)),
+                        TextSpan(
+                            text:
+                                "Apple iPhone 11 (A2223) 128GB 黑色 移动联通电信4G手机 双卡双待",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold)),
+                      ])),
                       Text(
-                        'Apple iPhone 11 (A2223) 128GB 黑色 移动联通电信4G手机 双卡双待',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        '【年货节抢购攻略】iPhone11Pro系列抢券享12期免息轻松月付无压力，XSMax限时抢券立减500元！更多优惠点击！ ',
+                        '【年货节抢购攻略】iPhone11Pro系列抢券享12期免息轻松月付无压力，XSMax限时抢券立减500元！更多优惠点击！',
                         style: TextStyle(color: Colors.grey, fontSize: 12.0),
                       ),
-                      Image.network(
-                          'https://img12.360buyimg.com/cms/jfs/t1/59203/28/10465/47768/5d791cd5Ee180cd0f/daf6ada1d57ca369.jpg!q70.dpg.webp'),
-                      Image.network(
-                          'https://img10.360buyimg.com/cms/jfs/t1/52388/18/10385/1411768/5d77f9b4E2d7878f2/e7c050794c278d17.jpg!q70.dpg.webp'),
-                      Image.network(
-                          'https://img12.360buyimg.com/cms/jfs/t1/40404/18/10660/539422/5d7b1c64Ed482a344/c7a223e22eaf0571.jpg!q70.dpg.webp')
+                      Image.asset('lib/assets/detail0.webp'),
+                      Image.asset('lib/assets/detail1.webp'),
+                      Image.asset('lib/assets/detail2.webp')
                     ],
                   ),
                 )
@@ -154,7 +158,7 @@ class GoodsTool extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -206,27 +210,26 @@ class GoodsTool extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () {},
                               child: Container(
-                                padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                                padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
                                 alignment: Alignment.center,
                                 color: Color(0xFFFFb000),
-                                child: Text('购物车',
-                                    style: TextStyle(color: Colors.white)),
+                                child: Text('加入购物车',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14)),
                               ),
                             ),
                           ),
-
                           Expanded(
                             flex: 1,
                             child: GestureDetector(
                               onTap: () {},
                               child: Container(
-                                padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+                                padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
                                 alignment: Alignment.center,
                                 color: Color(0xFFFF2000),
                                 child: Text('立即购买',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                    )),
+                                        color: Colors.white, fontSize: 14)),
                               ),
                             ),
                           )

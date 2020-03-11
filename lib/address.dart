@@ -37,7 +37,8 @@ class _AddressMainState extends State<AddressMain> {
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         // 这个是在页面绘制完成后回调， 那个时候肯定是有context 的
-        Provider.of<AddressData>(context).setAddressList(_addressList);
+        Provider.of<AddressData>(context, listen: false)
+            .setAddressList(_addressList);
       });
     });
   }
@@ -60,12 +61,12 @@ class _AddressMainState extends State<AddressMain> {
           appBar: AppBar(title: Text('收货地址')),
           body: Builder(builder: (BuildContext context) {
             return Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+              padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
               child: Stack(
                 children: <Widget>[
                   RefreshIndicator(
                       child: Container(
-                        margin: const EdgeInsets.only(bottom: 55.0),
+                        margin: EdgeInsets.only(bottom: 55.0),
                         child: ListView.builder(
                           itemCount: addressList.length,
                           itemBuilder: (BuildContext context, int index) {

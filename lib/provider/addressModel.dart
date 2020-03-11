@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 //  定义一个地址管理的的widget
 class AddressData with ChangeNotifier {
   List<AddressModel> addressList = [];
+  AddressData();
   setAddressList(data) {
     this.addressList = data;
     print('start set');

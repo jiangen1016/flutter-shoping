@@ -17,6 +17,7 @@ class EditAddress extends StatefulWidget {
 class _EditAddressState extends State<EditAddress> {
   @override
   void initState() {
+    print(widget.index);
     super.initState();
   }
 
@@ -138,10 +139,11 @@ class _AddressFormState extends State<AddressForm> {
           _address.text,
           _isDefaultAddress);
       if (_isNew) {
-        Provider.of<AddressData>(context).addAddrssItem(addressModel);
+        Provider.of<AddressData>(context, listen: false)
+            .addAddrssItem(addressModel);
         Navigator.of(context).pop('添加成功');
       } else {
-        Provider.of<AddressData>(context)
+        Provider.of<AddressData>(context, listen: false)
             .editAddressItem(widget.index, addressModel);
         Navigator.of(context).pop('保存成功');
       }
@@ -157,8 +159,8 @@ class _AddressFormState extends State<AddressForm> {
       if (widget.index == null) {
         _isNew = true;
       } else {
-        currentUser =
-            Provider.of<AddressData>(context).addressList[widget.index];
+        currentUser = Provider.of<AddressData>(context, listen: false)
+            .addressList[widget.index];
         print(currentUser.toString());
         _name.text = currentUser.userName;
         _address.text = currentUser.address;
