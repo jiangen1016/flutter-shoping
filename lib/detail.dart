@@ -23,114 +23,112 @@ class _GoodsDetailState extends State<GoodsDetail> {
         appBar: AppBar(title: Text('商品详情')),
         body: Stack(
           children: <Widget>[
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Text(
-                '123',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            ListView(
-              children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Container(
-                      height: 350.0,
-                      child: Swiper(
-                        itemCount: goodsImgs.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Image.network(goodsImgs[index],
-                              fit: BoxFit.fill);
-                        },
-                        pagination: SwiperPagination(margin: EdgeInsets.all(4)),
-                      ),
-                    )),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                      minWidth: MediaQuery.of(context).size.width),
-                  child: Image.network(
-                      'https://img10.360buyimg.com/ling/jfs/t1/109348/9/4702/72798/5e216daaE59fbf804/5caed3c8780968c3.jpg'),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 50),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(top: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              '¥599.00',
-                              style: TextStyle(
-                                  fontSize: 24.0,
-                                  color: Colors.redAccent,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Row(
+            Container(
+                padding: EdgeInsets.only(bottom: 100),
+                child: ListView(
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Container(
+                          height: 350.0,
+                          child: Swiper(
+                            itemCount: goodsImgs.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Image.network(goodsImgs[index],
+                                  fit: BoxFit.fill);
+                            },
+                            pagination:
+                                SwiperPagination(margin: EdgeInsets.all(4)),
+                          ),
+                        )),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minWidth: MediaQuery.of(context).size.width),
+                      child: Image.network(
+                          'https://img10.360buyimg.com/ling/jfs/t1/109348/9/4702/72798/5e216daaE59fbf804/5caed3c8780968c3.jpg'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 50),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: const EdgeInsets.only(top: 10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Column(
+                                Text(
+                                  '¥599.00',
+                                  style: TextStyle(
+                                      fontSize: 24.0,
+                                      color: Colors.redAccent,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Row(
                                   children: <Widget>[
-                                    Icon(
-                                      Icons.attach_money,
-                                      size: 20.0,
+                                    Column(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.attach_money,
+                                          size: 20.0,
+                                        ),
+                                        Text(
+                                          '降价提醒',
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.grey),
+                                        )
+                                      ],
                                     ),
-                                    Text(
-                                      '降价提醒',
-                                      style: TextStyle(
-                                          fontSize: 14.0, color: Colors.grey),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 10.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.star,
+                                            size: 20.0,
+                                          ),
+                                          Text(
+                                            '收藏',
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: Colors.grey),
+                                          )
+                                        ],
+                                      ),
                                     )
                                   ],
                                 ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 10.0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.star,
-                                        size: 20.0,
-                                      ),
-                                      Text(
-                                        '收藏',
-                                        style: TextStyle(
-                                            fontSize: 14.0, color: Colors.grey),
-                                      )
-                                    ],
-                                  ),
-                                )
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: "自营",
+                                style: TextStyle(
+                                    color: Colors.redAccent, fontSize: 14)),
+                            TextSpan(
+                                text:
+                                    "Apple iPhone 11 (A2223) 128GB 黑色 移动联通电信4G手机 双卡双待",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold)),
+                          ])),
+                          Text(
+                            '【年货节抢购攻略】iPhone11Pro系列抢券享12期免息轻松月付无压力，XSMax限时抢券立减500元！更多优惠点击！',
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 12.0),
+                          ),
+                          Image.asset('lib/assets/detail0.webp'),
+                          Image.asset('lib/assets/detail1.webp'),
+                          Image.asset('lib/assets/detail2.webp')
+                        ],
                       ),
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: "自营",
-                            style: TextStyle(
-                                color: Colors.redAccent, fontSize: 14)),
-                        TextSpan(
-                            text:
-                                "Apple iPhone 11 (A2223) 128GB 黑色 移动联通电信4G手机 双卡双待",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold)),
-                      ])),
-                      Text(
-                        '【年货节抢购攻略】iPhone11Pro系列抢券享12期免息轻松月付无压力，XSMax限时抢券立减500元！更多优惠点击！',
-                        style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                      ),
-                      Image.asset('lib/assets/detail0.webp'),
-                      Image.asset('lib/assets/detail1.webp'),
-                      Image.asset('lib/assets/detail2.webp')
-                    ],
-                  ),
-                )
-              ],
-            ),
-            GoodsTool()
+                    )
+                  ],
+                )),
+            Container(child: GoodsTool()),
           ],
         ));
   }
@@ -147,114 +145,114 @@ class GoodsTool extends StatelessWidget {
         bottom: 0.0,
         left: 0.0,
         right: 0.0,
-        child: Container(
-            padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-            color: Colors.white,
-            constraints: BoxConstraints.tightFor(
-              width: mWidth,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            //  联系客服
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.contact_phone),
-                              Text('联系客服')
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            //  去店铺
-                          },
-                          child: Column(
-                            children: <Widget>[Icon(Icons.home), Text('进店')],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            //  去购物车
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyCart(msg: '姜恩')));
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.shopping_cart),
-                              Text('购物车')
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
+        child: SafeArea(
+          child: Container(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              color: Colors.white,
+              constraints: BoxConstraints.tightFor(width: mWidth),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
                     flex: 2,
-                    child: Container(
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                                alignment: Alignment.center,
-                                color: Color(0xFFFFb000),
-                                child: Text('加入购物车',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14)),
-                              ),
+                          GestureDetector(
+                            onTap: () {
+                              //  联系客服
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.contact_phone),
+                                Text('联系客服')
+                              ],
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                                alignment: Alignment.center,
-                                color: Color(0xFFFF2000),
-                                child: Text('立即购买',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14)),
-                              ),
+                          GestureDetector(
+                            onTap: () {
+                              //  去店铺
+                            },
+                            child: Column(
+                              children: <Widget>[Icon(Icons.home), Text('进店')],
                             ),
-                          )
-
-                          // RaisedButton(
-                          //   onPressed: () {
-                          //     Scaffold.of(context).showSnackBar(SnackBar(
-                          //       content: Text('添加购物车成功'),
-                          //     ));
-                          //   },
-                          //   child: Text('加入购物车'),
-                          //   textColor: Colors.white,
-                          //   color: const Color(0xFFFFb000),
-                          // ),
-                          // RaisedButton(
-                          //   onPressed: () {},
-                          //   child: Text('立即购买'),
-                          //   textColor: Colors.white,
-                          //   color: const Color(0xFFFF2000),
-                          // ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              //  去购物车
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyCart(msg: '')));
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.shopping_cart),
+                                Text('购物车')
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    )),
-              ],
-            )),
+                    ),
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: Container(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                  alignment: Alignment.center,
+                                  color: Color(0xFFFFb000),
+                                  child: Text('加入购物车',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 14)),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                  alignment: Alignment.center,
+                                  color: Color(0xFFFF2000),
+                                  child: Text('立即购买',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 14)),
+                                ),
+                              ),
+                            )
+
+                            // RaisedButton(
+                            //   onPressed: () {
+                            //     Scaffold.of(context).showSnackBar(SnackBar(
+                            //       content: Text('添加购物车成功'),
+                            //     ));
+                            //   },
+                            //   child: Text('加入购物车'),
+                            //   textColor: Colors.white,
+                            //   color: const Color(0xFFFFb000),
+                            // ),
+                            // RaisedButton(
+                            //   onPressed: () {},
+                            //   child: Text('立即购买'),
+                            //   textColor: Colors.white,
+                            //   color: const Color(0xFFFF2000),
+                            // ),
+                          ],
+                        ),
+                      )),
+                ],
+              )),
+        ),
       ),
     );
   }

@@ -24,31 +24,64 @@ class _ResultPageState extends State<ResultPage> {
     super.initState();
   }
 
+  Function a(old, now) {}
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _hasSearch
-          ? Center(
-              child:
-                  //  CupertinoActivityIndicator(
-                  //   radius: 30.0,
-                  //   animating: false,
-                  // ),
-                  Loading(
-                      indicator: BallPulseIndicator(),
-                      size: 100.0,
-                      color: Colors.grey),
-            )
-          : ListView.builder(
-              itemCount: 10,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ListTile(
-                    title: Text(_result),
-                  ),
-                );
-              }),
-    );
+        child: _hasSearch
+            ? Center(
+                child:
+                    //  CupertinoActivityIndicator(
+                    //   radius: 30.0,
+                    //   animating: false,
+                    // ),
+                    Loading(
+                        indicator: BallPulseIndicator(),
+                        size: 100.0,
+                        color: Colors.grey),
+              )
+            : ReorderableListView(children: [
+                ListTile(
+                  key: ValueKey('0'),
+                  title: Text(_result),
+                ),
+                ListTile(
+                  key: ValueKey('1'),
+
+                  title: Text(_result),
+                ),
+                ListTile(
+                  key: ValueKey('2'),
+
+                  title: Text(_result),
+                ),
+                ListTile(
+                  key: ValueKey('3'),
+
+                  title: Text(_result),
+                ),
+                ListTile(
+                  key: ValueKey('4'),
+
+                  title: Text(_result),
+                ),
+                ListTile(
+                  key: ValueKey('5'),
+
+                  title: Text(_result),
+                )
+              ], onReorder: a));
+
+    // ListView.builder(
+    //     itemCount: 10,
+    //     itemBuilder: (BuildContext context, int index) {
+    //       return Padding(
+    //         padding: const EdgeInsets.all(10.0),
+    //         child: ListTile(
+    //           title: Text(_result),
+    //         ),
+    //       );
+    //     }),
   }
 }

@@ -1,13 +1,12 @@
 import 'package:first_flutter/address.dart';
 import 'package:first_flutter/login.dart';
+import 'package:first_flutter/webview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // import 'package:provider/provider.dart';
 // import 'provider/addressModel.dart';
-
-void main() => runApp(User());
 
 class User extends StatefulWidget {
   User({Key key}) : super(key: key);
@@ -33,73 +32,85 @@ class _UserState extends State<User> with AutomaticKeepAliveClientMixin {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: <Widget>[
-            UserTile(),
-            ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AddressMain()));
-                  },
-                  child: Container(
-                      child: ListTile(
-                        title: Text('我的地址'),
-                      ),
-                      decoration: _borderStyle),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    print('关于');
-                    _launchURL();
-                  },
-                  child: Container(
+        child: Container(
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              UserTile(),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddressMain()));
+                },
+                child: Container(
                     child: ListTile(
-                      title: Text('关于商城'),
+                      // leading: Icon(Icons.person),
+                      title: Text('我的地址'),
+                      // trailing: Icon(Icons.pets)
                     ),
-                    decoration: _borderStyle,
+                    decoration: _borderStyle),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WebViewExample()));
+                },
+                child: Container(
+                  child: ListTile(title: Text('webview')),
+                  decoration: _borderStyle,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  print('关于');
+                  _launchURL();
+                },
+                child: Container(
+                  child: ListTile(
+                    title: Text('关于商城'),
                   ),
+                  decoration: _borderStyle,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CupertinoAlertDialog(
-                            title: Text('退出'),
-                            content: Text('是否退出当前登录?'),
-                            actions: <Widget>[
-                              CupertinoDialogAction(
-                                child: Text('是'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => LoginPage()));
-                                },
-                              ),
-                              CupertinoDialogAction(
-                                child: Text('否'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        });
-                  },
-                  child: Container(
-                      child: ListTile(
-                        title: Text('退出登录'),
-                      ),
-                      decoration: _borderStyle),
-                ),
-              ],
-            )
-          ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text('退出'),
+                          content: Text('是否退出当前登录?'),
+                          actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text('是'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    new MaterialPageRoute(
+                                        builder: (context) => LoginPage()),
+                                    (route) => route == null);
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text('否'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      });
+                },
+                child: Container(
+                    child: ListTile(
+                      title: Text('退出登录'),
+                    ),
+                    decoration: _borderStyle),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -50,7 +50,7 @@ class _EditAddressState extends State<EditAddress> {
                               child: Text('确定'),
                               onPressed: () {
                                 Navigator.of(context).pop();
-                                Provider.of<AddressData>(context)
+                                Provider.of<AddressData>(context, listen: false)
                                     .removeAddressList(widget.index); // 关闭弹窗
                                 Navigator.of(context).pop('删除成功');
                               },
@@ -102,7 +102,9 @@ class _AddressFormState extends State<AddressForm> {
   _showCistPicker() async {
     print(_locationCode.toString());
     Result result = await CityPickers.showCityPicker(
-        context: context, locationCode: _locationCode.toString());
+        context: context,
+        locationCode:
+            _locationCode != null ? _locationCode.toString() : '110000');
     print(result);
     if (result != null) {
       _cityAndArea.text =

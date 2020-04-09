@@ -11,24 +11,25 @@ import 'http/http.dart';
 import 'provider/addressModel.dart';
 // import 'provider/searchModel.dart';
 
-void main() => runApp(
-      MultiProvider(
-        providers: [
-          // Provider<AddressData>(create: (_) => AddressData()),
-          // Provider<CarData>(create: (_) => CarData())
-          // Provider<CarData>(create: (_) => CarData()),
-          // Provider<AddressData>(create: (_) => AddressData()),
-          ChangeNotifierProvider(create: (_) => AddressData()),
-          ChangeNotifierProvider(create: (_) => CarData()),
-          // Provider<AddressData>.value(value: AddressData()),
-          // Provider<CarData>.value(value: CarData([])),
-        ],
-        child: Shopping(),
-      ),
-      // ChangeNotifierProvider.value(
-      //   value: AddressData(),
-      //   child: Shopping(),
-      // )
+void main() => runApp(ColorFiltered(
+        colorFilter: ColorFilter.mode(Colors.white, BlendMode.color),
+        child: MultiProvider(
+          providers: [
+            // Provider<AddressData>(create: (_) => AddressData()),
+            // Provider<CarData>(create: (_) => CarData())
+            // Provider<CarData>(create: (_) => CarData()),
+            // Provider<AddressData>(create: (_) => AddressData()),
+            ChangeNotifierProvider(create: (_) => AddressData()),
+            ChangeNotifierProvider(create: (_) => CarData()),
+            // Provider<AddressData>.value(value: AddressData()),
+            // Provider<CarData>.value(value: CarData([])),
+          ],
+          child: Shopping(),
+        ))
+    // ChangeNotifierProvider.value(
+    //   value: AddressData(),
+    //   child: Shopping(),
+    // )
     );
 
 class Shopping extends StatefulWidget {
@@ -39,7 +40,7 @@ class Shopping extends StatefulWidget {
 
 class _ShoppingState extends State<Shopping> {
   int selectBar = 0;
-  String titleName = '盛安德商城';
+  String _titleName = '盛安德商城';
 
   List<Widget> _widgetOptions = [];
 
@@ -56,16 +57,16 @@ class _ShoppingState extends State<Shopping> {
       pageController.jumpToPage(index);
       switch (selectBar) {
         case 0:
-          titleName = '盛安德商城';
+          _titleName = '盛安德商城';
           break;
         case 1:
-          titleName = '购物车';
+          _titleName = '购物车';
           break;
         case 2:
-          titleName = '用户中心';
+          _titleName = '用户中心';
           break;
         default:
-          titleName = '盛安德商城';
+          _titleName = '盛安德商城';
           break;
       }
     });
@@ -91,7 +92,8 @@ class _ShoppingState extends State<Shopping> {
       theme: ThemeData(primaryColor: Colors.redAccent),
       home: Scaffold(
         appBar: AppBar(
-          title: Text(titleName),
+          centerTitle: true,
+          title: Text(_titleName),
           actions: <Widget>[getSearchItem()],
         ),
         // body: _widgetOptions[selectBar],
@@ -167,42 +169,31 @@ class SearchBarDelegate extends SearchDelegate<String> {
         icon: AnimatedIcon(
             icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
         onPressed: () {
-          if (query.isEmpty) {
-            close(context, null);
-          } else {
-            query = "";
-          }
+          // if (query.isEmpty) {
+          //   close(context, null);
+          // } else {
+          //   query = "";
+          // }
+          close(context, null);
         });
   }
 
-  Future _getList() async {
-    return await HttpUtils.request(
-        'https://www.fastmock.site/mock/b7b1c8dd0f5250ffc71c0d191e06758b/dio/getAddress');
-  }
+  // Future _getList() async {
+  //   return await HttpUtils.request(
+  //       'https://www.fastmock.site/mock/b7b1c8dd0f5250ffc71c0d191e06758b/dio/getAddress');
+  // }
 
   @override
   Widget buildResults(BuildContext context) {
     final suggestionList = query.toString();
 
     return ResultPage();
-    // Future.delayed(Duration(seconds: 2), () {
-    //   return ListView.builder(
-    //       itemCount: 10,
-    //       itemBuilder: (BuildContext context, int index) {
-    //         return Padding(
-    //           padding: const EdgeInsets.all(10.0),
-    //           child: ListTile(
-    //             title: Text(suggestionList),
-    //           ),
-    //         );
-    //       });
-    // });
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.toString();
-    final isEmpty = query.isEmpty;
+    // final suggestionList = query.toString();
+    // final isEmpty = query.isEmpty;
     return Padding(
         padding: const EdgeInsets.all(10.0),
         child: SuggestionTags(tagList: [
@@ -224,18 +215,6 @@ class SearchBarDelegate extends SearchDelegate<String> {
           '清蒸八宝猪',
           '江米酿鸭子'
         ]));
-
-    // ListView.builder(
-    //     itemCount: 10,
-    //     itemBuilder: (BuildContext context, int index) {
-    //       return Padding(
-    //         padding: const EdgeInsets.all(10.0),
-    //         child: ListTile(
-    //           title: Text('1'),
-    //         ),
-    //       );
-    //     });
-    // });
   }
 }
 

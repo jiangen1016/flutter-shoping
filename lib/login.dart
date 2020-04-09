@@ -36,18 +36,18 @@ class _LoginPageState extends State<LoginPage> {
       Future.delayed(Duration(seconds: 2)).then((res) {
         setState(() {
           _isLogin = false;
-          Navigator.of(context).pushAndRemoveUntil(
-              new MaterialPageRoute(builder: (context) => Shopping()),
-              (route) => route == null);
         });
+        Navigator.of(context).pushAndRemoveUntil(
+            new MaterialPageRoute(builder: (context) => Shopping()),
+            (route) => route == null);
       });
     } else {}
   }
 
   UnderlineInputBorder _focusedBorderStyle = UnderlineInputBorder(
       borderSide: BorderSide(
-    color: Colors.blueAccent, //边框颜色为蓝色
-    width: 2, //宽度为5
+    color: Colors.black, //边框颜色为黑色
+    width: 1, //宽度为5
   ));
 
   @override
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Container(
-                      margin: EdgeInsets.only(bottom: 10),
+                      margin: EdgeInsets.only(bottom: 20),
                       child: Center(
                         child: Image.asset('lib/assets/logo.png'),
                       )),
@@ -99,6 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                         return '用户名不能小于6位数';
                       }
                     },
+                  ),
+                  Container(
+                    height: 20,
                   ),
                   TextFormField(
                     controller: TextEditingController.fromValue(

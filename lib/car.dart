@@ -124,7 +124,7 @@ class ReturnCarMain extends StatefulWidget {
 class _ReturnCarMainState extends State<ReturnCarMain> {
   @override
   Widget build(BuildContext context) {
-    var carData = Provider.of<CarData>(context, listen: false);
+    var carData = Provider.of<CarData>(context);
     return RefreshIndicator(
         child: Container(
           child: Padding(
@@ -411,8 +411,9 @@ class _GoodsNumState extends State<GoodsNum> {
                                         carData.carList[widget.index].goodCount
                                             .toString() &&
                                     numberController.text != '') {
-                                  carData.changeCountForModal(widget.index,
-                                      int.parse(numberController.text));
+                                  Provider.of<CarData>(context, listen: false)
+                                      .changeCountForModal(widget.index,
+                                          int.parse(numberController.text));
                                 }
                                 Navigator.pop(context);
                               })
